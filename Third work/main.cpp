@@ -1,8 +1,8 @@
 /* **************************************************************** */
 /* filename: main.cpp                                               */
 /* abstract: The program makes a database.                          */
-/*			 the app is intended for computer classes,              */
-/*			 computer stores, and others.                           */
+/*	     the app is intended for computer classes,              */
+/*	     computer stores, and others.                           */
 /* description:                                                     */
 /* creation date: 2020/03/04                                        */
 /* autor: Ignakov Konstantin                                        */
