@@ -17,7 +17,7 @@ void logotype(){
 
 // help
 void INFO(){
-	std::cout << "usage: ./bad_east [ -r | -c ] N file.txt" << std::endl
+	std::cout << "usage: ./snow_man [ -r | -c ] N file.txt" << std::endl
 		<< "\x1B[32mINFO\x1B[0m: "
 		<< "\tThe program builds databases or displays it on the screen.\n"
 		<< "\tThe app is intended for computer classes,\n"

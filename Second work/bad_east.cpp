@@ -33,13 +33,13 @@ int main(int argc, char const *argv[]){
 	}
 
 	// write data 2 file
-	if (!strcmp(argv[1], "-c")){
+	if (!strcmp(argv[1], "-c") && (argc == 4)){
 		writeDB(argc, argv);
 		return 0;
 	}
 
 	// read DB
-	if (!strcmp(argv[1], "-r")){
+	if (!strcmp(argv[1], "-r") && (argc == 4)){
 		readDB(argc, argv);
     	return 0;
 	}

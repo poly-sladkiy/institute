@@ -65,8 +65,6 @@ void INFO(){
 // if argv[1] == "-c"
 void writeDB(int argc, char const *argv[]){
 
-	if (argc != 4) { INFO(); }
-
 	// check open file for write
 	FILE* fp;
 	if((fp=fopen(argv[3], "w")) == NULL) {
@@ -109,8 +107,6 @@ void writeDB(int argc, char const *argv[]){
 
 // if argv[1] == "-r"
 void readDB(int argc, char const *argv[]){
-
-		if (argc != 4) { INFO(); }
 
 		std::ifstream fin(argv[3]);
 

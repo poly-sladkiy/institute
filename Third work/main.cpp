@@ -51,7 +51,7 @@ int enter_AND_check(){
 int main(int argc, char const *argv[]){
 
 	if ((argc == 1) || (argc == 3) || (argc > 4)){
-		std::cout << "\x1B[32musage\x1B[0m: ./bad_east [ -r | -c ] N file\n"
+		std::cout << "\x1B[32musage\x1B[0m: ./snow_man [ -r | -c ] N file\n"
 			<< "\tN\t\t- number of records\n"
 			<< "\t[-h | --help]\t-for more information\n";
 		return 0;
@@ -100,5 +100,73 @@ int main(int argc, char const *argv[]){
  		}
  	}
 
+ 	if((argc==4) && (!strcmp(argv[1],"-r")) && (atoi(argv[2])!=0)){
+ 		std::ifstream fin(argv[3]);
+
+		if (!fin.is_open()){
+			std::cout << "\x1B[1;5;31mError:!\n"
+				<< "File cannot be open for read!\x1B[0m\n";
+			exit(1);
+		}
+		else{
+
+			std::string msg;
+			int N = std::atoi(argv[2]);
+			if(N<=0){std::cout<<"\x1B[31;5mError, n<=0\x1B[0m"<<std::endl;}
+
+			std::string socket;
+ 			int gHz;
+ 			int RAM;
+ 			int ROM;
+ 			std::string monitor;
+
+			fin >> msg;
+			if (N > std::stoi(msg)){
+				std::cout << "\x1B[31mYou enter more value, than DB consist!\n\x1B[0m";
+				N = std::stoi(msg);
+			}
+
+			std::cout << "+-------------+---------+---------+---------+-----------+\n"
+				<< "|    \x1B[36msoket\x1B[0m    |   \x1B[36mMHz\x1B[0m   |   \x1B[36mRAM\x1B[0m   |   \x1B[36mROM\x1B[0m   |  \x1B[36mMonitor\x1B[0m  |\n"
+				<< "+-------------+---------+---------+---------+-----------+\n";
+
+			for (int i = 0; (i < N) && (!fin.eof()); ++i)
+			{
+				technicalParameters info;
+				fin >> socket >> gHz >> RAM >> ROM >> monitor;
+
+				std::cout << "|" << center(13, socket)
+					<< "|" << center(9, gHz)
+					<< "|" << center(9, RAM)
+					<< "|" << center(9, ROM)
+					<< "|" << center(11, monitor) << "|\n"
+					<< "+-------------+---------+---------+---------+-----------+\n";
+
+			}
+		}
+ 	}
+
 	return 0;
+}
+
+// std has left and rigth, but does noy exsist center:
+std::string center(int width, const std::string& str) {
+    int len = str.length();
+    if(width < len) { return str; }
+
+    int diff = width - len;
+    int pad1 = diff/2;
+    int pad2 = diff - pad1;
+    return std::string(pad1, ' ') + str + std::string(pad2, ' ');
+}
+
+std::string center(int width, const int& msg) {
+    std::string str = std::to_string(msg);
+    int len = str.length();
+    if(width < len) { return str; }
+
+    int diff = width - len;
+    int pad1 = diff/2;
+    int pad2 = diff - pad1;
+    return std::string(pad1, ' ') + str + std::string(pad2, ' ');
 }
