@@ -2,7 +2,8 @@ from covid import Covid
 import time
 
 def print_covid(info, i):
-	print('#', i)
+	print('#', i, end=' ')
+	print(time.strftime('%I:%M:%S %p'))
 	print('Russia\nconfirmed:\t', info['confirmed'])
 	print('active:\t\t', info['active'])
 	print('deaths:\t\t', info['deaths'])
