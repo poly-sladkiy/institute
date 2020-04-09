@@ -18,9 +18,9 @@ print_covid(russia_cases, i)
 while True:
 	russia_new_cases = covid.get_status_by_country_name("russia")
 	if russia_new_cases['last_update'] > russia_cases['last_update']:
+		i += 1
 		print_covid(russia_new_cases, i)
 		russia_cases = russia_new_cases
-		i += 1
 
 	time.sleep(1)
 	pass
