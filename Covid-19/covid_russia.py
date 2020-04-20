@@ -1,27 +1,40 @@
-from covid import Covid
 import time
+import requests
+from bs4 import BeautifulSoup
 
-def print_covid(info, i):
-	print('#', i, end=' ')
-	print(time.strftime('%I:%M:%S %p'))
-	print('Russia\nconfirmed:\t', info['confirmed'])
-	print('active:\t\t', info['active'])
-	print('deaths:\t\t', info['deaths'])
-	print('recovered:\t', info['recovered'])
-	print()
+WEB_SITE = 'https://стопкоронавирус.рф'
+headers = {'User-Agent': 'Mozilla/5.0'}
 
+class Covid(object):
+
+	value = None
+
+	def __init__(self):
+		self.value = self.check_covid()
+		pass
+
+	def print_covid(self):
+		print(self.value[26].text)
+		print('Случаи заболевания:', int(self.value[22].text.replace(' ', '')))
+		print('За сутки:', int(self.value[23].text.replace(' ', '')))
+		print('Выздоровевшие:', int(self.value[24].text.replace(' ', '')))
+		print('Погибло:', int(self.value[25].text.replace(' ', '')), end='\n\n')
+		pass
+
+	def check_covid(self):
+		full_page = requests.get(WEB_SITE, headers=headers)
+		soup = BeautifulSoup(full_page.content, 'html.parser')
+
+		self.value = soup.findAll('span', {'class': ''})
+
+		return self.value
+
+print('Russia:')
 covid = Covid()
-
-i = 1
-russia_cases = covid.get_status_by_country_name("russia")
-print_covid(russia_cases, i)
+covid.print_covid()
 
 while True:
-	russia_new_cases = covid.get_status_by_country_name("russia")
-	if russia_new_cases['last_update'] > russia_cases['last_update']:
-		i += 1
-		print_covid(russia_new_cases, i)
-		russia_cases = russia_new_cases
-
-	time.sleep(1)
+	if covid.value != covid.check_covid():
+		covid.print_covid()
+	time.sleep(5)
 	pass
