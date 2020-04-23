@@ -2,24 +2,20 @@ import time
 import requests
 from bs4 import BeautifulSoup
 
-WEB_SITE = 'https://стопкоронавирус.рф'
+WEB_SITE = 'https://www.worldometers.info/coronavirus/country/russia/'
 headers = {'User-Agent': 'Mozilla/5.0'}
 
-class Covid(object):
-
-	value = None
+class Covid():
 
 	def __init__(self):
 		self.value = self.check_covid()
 		pass
 
 	def print_covid(self):
-		print(self.value[26].text)
-		print('Случаи заболевания:', int(self.value[22].text.replace(' ', '')))
-		print('За сутки:', int(self.value[23].text.replace(' ', '')))
-		print('Выздоровевшие:', int(self.value[24].text.replace(' ', '')))
-		print('Погибло:', int(self.value[25].text.replace(' ', '')), end='\n\n')
-		pass
+		print(time.strftime('%I:%M:%S %p'))
+		print('Active:', int(self.value[1].text.replace(',', '')))
+		print('Deaths:', int(self.value[2].text.replace(',', '')))
+		print('Recovered:', int(self.value[3].text.replace(',', '')), end='\n\n')
 
 	def check_covid(self):
 		full_page = requests.get(WEB_SITE, headers=headers)
@@ -29,8 +25,8 @@ class Covid(object):
 
 		return self.value
 
-print('Russia:')
 covid = Covid()
+print('Russia')
 covid.print_covid()
 
 while True:
