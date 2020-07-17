@@ -1,6 +1,5 @@
 #include <iostream>
 
-
 void logotype(){
 	char logo[]="\x1B[31m                      (                             \n"             
 	"             (        )\\ )  (         (        )           \n"
