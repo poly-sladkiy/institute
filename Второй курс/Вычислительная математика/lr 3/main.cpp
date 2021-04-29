@@ -384,7 +384,7 @@ void Lagrangian_Equally() {
 
 //Главная функция кода
 int main() {
-    logotype();
+    cout << logotype << endl << endl;
 
     Lagrangian_Unequally();
     Lagrangian_Equally();

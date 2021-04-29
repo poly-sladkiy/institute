@@ -1,21 +1,31 @@
 //
-// Created by ignak on 28.04.2021.
+// Created by ignak on 29.04.2021.
 //
+
 #include <string>
-#include <iostream>
 #include "colors.h"
 
-const std::string_view LOGO =
-        "                      (                             \n"
-        "             (        )\\ )  (         (        )           \n"
-        "             )\\ (    (()/(  )\\    )   )\\ )  ( /( (   (     \n"
-        " `  )    (  ((_))\\ )  /(_))((_)( /(  (()/(  )\\()))\\  )\\ )  \n"
-        " /(/(    )\\  _ (()/( (_))   _  )(_))  ((_))((_)\\((_)(()/(  \n"
-        "((_)_\\  ((_)| | )(_))/ __| | |((_)_   _| | | |(_)(_) )(_)) \n"
-        "| '_ \\)/ _ \\| || || |\\__ \\ | |/ _` |/ _` | | / / | || || | \n"
-        "| .__/ \\___/|_| \\_, ||___/ |_|\\__,_|\\__,_| |_\\_\\ |_| \\_, | \n"
-        "|_|             |__/                                 |__/  \n";
+using namespace poly::color;
 
-void logotype() {
-    std::cout << RED << LOGO << RESET;
-}
+#ifndef POLY_LOGOTYPE_LIB
+#define POLY_LOGOTYPE_LIB
+
+const std::string logotype =
+        PURPLE +
+        "       _                        \n"
+        "       \\`*-.                    \n"
+        "        )  _`-.                 \n"
+        "       .  : `. .                \n"
+        "       : _   '  \\               \n"
+        "       ; " + CYAN + "*" + PURPLE + "  `_.   `*-._          \n"
+        "       `-.-'          `-.                  " + RED + "@PolySladkiy developer\n" + PURPLE +
+        "         ;       `       `.                " + RED + "github: https://github.com/polySladkiy\n" + PURPLE +
+        "         :.       .        \\    \n"
+        "         . \\  .   :   .-'   .   \n"
+        "         '  `+.;  ;  '      :   \n"
+        "         :  '  |    ;       ;-. \n"
+        "         ; '   : :`-:     _.`* ;\n"
+        "      .*' /  .*' ; .*`- +'  `*' \n"
+        "      `*-*   `*-*  `*-*'" + RESET;
+
+#endif
