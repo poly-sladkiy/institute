@@ -1,0 +1,4 @@
+/usr/bin/cmake -DCMAKE_BUILD_TYPE=Debug -G "CodeBlocks - Unix Makefiles" "/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4"
+-- Configuring done
+-- Generating done
+-- Build files have been written to: /mnt/g/courses/Study/institute/Р’С‚РѕСЂРѕР№ РєСѓСЂСЃ/Р’С‹С‡РёСЃР»РёС‚РµР»СЊРЅР°СЏ РјР°С‚РµРјР°С‚РёРєР°/lr 4/cmake-build-debug

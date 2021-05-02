@@ -1,0 +1,3 @@
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/cmake-build-debug/CMakeFiles/rebuild_cache.dir
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/cmake-build-debug/CMakeFiles/edit_cache.dir
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/cmake-build-debug/CMakeFiles/lr4.dir

@@ -1,0 +1,24 @@
+#IncludeRegexLine: ^[ 	]*[#%][ 	]*(include|import)[ 	]*[<"]([^">]+)([">])
+
+#IncludeRegexScan: ^.*$
+
+#IncludeRegexComplain: ^$
+
+#IncludeRegexTransform: 
+
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/colors.h
+string
+-
+
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/main.cpp
+iostream
+-
+iomanip
+-
+cmath
+-
+vector
+-
+colors.h
+/mnt/g/courses/Study/institute/Второй курс/Вычислительная математика/lr 4/colors.h
+

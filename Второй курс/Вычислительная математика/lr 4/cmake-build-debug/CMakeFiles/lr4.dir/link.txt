@@ -1,0 +1,1 @@
+/usr/bin/c++  -Wextra -lpthread -ltbb -g   CMakeFiles/lr4.dir/main.cpp.o  -o lr4  -Wextra -lpthread -ltbb 
