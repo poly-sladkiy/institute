@@ -3,14 +3,14 @@
 //
 
 #include <string>
-#include "colors.h"
+#include "../lr 3/colors.h"
 
 using namespace poly::color;
 
 #ifndef POLY_LOGOTYPE_LIB
 #define POLY_LOGOTYPE_LIB
 
-const std::string logotype =
+[[maybe_unused]] const std::string logotype =
         PURPLE +
         "       _                        \n"
         "       \\`*-.                    \n"

@@ -4,6 +4,7 @@
 #include <vector>
 
 #include "colors.h"
+#include "logo.h"
 
 using namespace poly::color;
 using namespace std;
@@ -143,6 +144,8 @@ double Simpson2() {
 }
 
 int main() {
+    cout << logotype << endl << endl;
+
     counting();
 
     double results[6][3] = {};
