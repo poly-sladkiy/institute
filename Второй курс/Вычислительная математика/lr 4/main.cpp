@@ -2,6 +2,8 @@
 #include <iomanip>
 #include <cmath>
 #include <vector>
+#include <thread>
+#include <chrono>
 
 #include "colors.h"
 #include "logo.h"
@@ -166,12 +168,28 @@ int main() {
     results[4][2] = 1;
     results[5][2] = 2;
 
-    results[0][1] = Rectangles1();
-    results[1][1] = Trapezoids1();
-    results[2][1] = Simpson1();
-    results[3][1] = Rectangles2();
-    results[4][1] = Trapezoids2();
-    results[5][1] = Simpson2();
+    {
+        auto start = chrono::system_clock::now();
+
+        thread t1([&] { results[0][1] = Rectangles1(); });
+        thread t2([&] { results[1][1] = Trapezoids1(); });
+        thread t3([&] { results[2][1] = Simpson1(); });
+        thread t4([&] { results[3][1] = Rectangles2(); });
+        thread t5([&] { results[4][1] = Trapezoids2(); });
+        thread t6([&] { results[5][1] = Simpson2(); });
+
+        t1.join();
+        t2.join();
+        t3.join();
+        t4.join();
+        t5.join();
+        t6.join();
+
+        auto end = chrono::system_clock::now();
+        chrono::duration<double> diff = end - start;
+        cout << "Time to calculate all methods: " << setw(9)
+             << diff.count() << " s." << endl;
+    }
 
     for (int q = 0; q < 5; q++) {
         for (int i = 0; i < 5; i++) {
@@ -191,7 +209,7 @@ int main() {
          << RED << "Method" << GREEN << "       |" << endl;
     cout << "+----------+-----+--------------------+" << endl;
 
-    for (auto & result : results) {
+    for (auto &result : results) {
         cout << "| " << PURPLE << setw(8) << result[1] << GREEN
              << " | " << WHITE << setw(3) << result[0] << GREEN << " | ";
         if (result[2] == 0) {
