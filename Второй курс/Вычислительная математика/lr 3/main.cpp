@@ -173,11 +173,11 @@ int Newton() {
     float midPoint = (coord[0][0] + coord[coord.size() - 1][0]) / 2;
 
     //Находим значения функции
-    for (int k = 0; k < argVal.size(); k++) {
+    for (float k : argVal) {
         //Если Xi лежит в промежутке [x0; (x0 + xn) / 2]
-        if (argVal[k] < midPoint) {
+        if (k < midPoint) {
             //t вычисляется как (x - x0)/h
-            t = (argVal[k] - coord[0][0]) / h;
+            t = (k - coord[0][0]) / h;
 
             //В список ответов заносим значение полученное при интерполяции вперед
             result.push_back(directInterpolation(t, coord, finiteDifferences));
@@ -185,7 +185,7 @@ int Newton() {
             //Иначе Xi лежит в промежутке [(x0 - xn)/2; xn]
         else {
             //t вычисляется как (x - xn)/h
-            t = (argVal[k] - coord[coord.size() - 1][0]) / h;
+            t = (k - coord[coord.size() - 1][0]) / h;
 
             //В список ответов заносим значение полученное при интерполяции назад
             result.push_back(reverseInterpolation(t, coord, finiteDifferences));
@@ -215,7 +215,7 @@ int Newton() {
 ///////////////////////////////////////////////////////////////
 
 //Вывод табличек для методов Лагранжа
-void LagrangianPrint(vector<vector<float>> &coord, vector<float> &argVal, vector<float> &result) {
+void LagrangianPrint(vector<vector<float>> &crd, vector<float> &arg_vec, vector<float> &result) {
     //Print_coord_start//
     cout << endl;
 
@@ -225,7 +225,7 @@ void LagrangianPrint(vector<vector<float>> &coord, vector<float> &argVal, vector
          << "|   x   |   y   |\n"
          << "+-------+-------+\n";
 
-    for (auto &i : coord) {
+    for (auto &i : crd) {
         cout << "|" << setw(7) << setprecision(5) << i[0] << "|" << setw(7) << setprecision(5) << i[1] << "|\n";
     }
     cout << "+-------+-------+\n";
@@ -237,31 +237,31 @@ void LagrangianPrint(vector<vector<float>> &coord, vector<float> &argVal, vector
     cout << "The points where we need to find the function value:\n";
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
 
     cout << "|";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "   x" << i << "   |";
     }
     cout << endl;
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
 
     cout << "|";
-    for (float i : argVal) {
+    for (float i : arg_vec) {
         cout << setw(8) << setprecision(5) << i << "|";
     }
     cout << endl;
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
@@ -274,31 +274,31 @@ void LagrangianPrint(vector<vector<float>> &coord, vector<float> &argVal, vector
     cout << "Answer:\n";
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
 
     cout << "|";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "   y" << i << "   |";
     }
     cout << endl;
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
 
     cout << "|";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << setw(8) << setprecision(5) << result[i] << "|";
     }
     cout << endl;
 
     cout << "+";
-    for (int i = 0; i < argVal.size(); i++) {
+    for (int i = 0; i < arg_vec.size(); i++) {
         cout << "--------+";
     }
     cout << endl;
@@ -320,7 +320,7 @@ void Lagrangian_Unequally() {
 
     vector<float> result;
 
-    for (int k = 0; k < argValLagUneq.size(); k++) {
+    for (float k : argValLagUneq) {
         float stepRes = 0.0;
 
         for (int i = 0; i < coordLagUneq.size(); i++) {
@@ -329,7 +329,7 @@ void Lagrangian_Unequally() {
             for (int j = 0; j < coordLagUneq.size(); j++) {
                 if (i != j) {
                     //Вычисление членов произведения
-                    temp *= (argValLagUneq[k] - coordLagUneq[j][0]) / (coordLagUneq[i][0] - coordLagUneq[j][0]);
+                    temp *= (k - coordLagUneq[j][0]) / (coordLagUneq[i][0] - coordLagUneq[j][0]);
                 }
             }
 
