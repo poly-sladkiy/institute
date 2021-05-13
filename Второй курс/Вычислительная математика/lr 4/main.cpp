@@ -32,8 +32,8 @@ double function(double x) {
 void counting() {
     double tmp1{a};
     double tmp2{a};
-    unsigned int i1{0};
-    unsigned int i2{0};
+    size_t i1{0};
+    size_t i2{0};
 
     cout << "+-----+----------+----------+----------+----------+" << endl;
     cout << "|  i  |    xi    |    yi    |  xi-1/2  |  yi-1/2  |" << endl;
@@ -100,7 +100,7 @@ double Rectangles2() {
 double Trapezoids1() {
     double I{0.0};
 
-    for (unsigned int q = 1; q < h1_func.size() - 1; q++) {
+    for (size_t q = 1; q < h1_func.size() - 1; q++) {
         I += h1_func[q];
     }
 
@@ -110,7 +110,7 @@ double Trapezoids1() {
 double Trapezoids2() {
     double I{0.0};
 
-    for (unsigned int q = 1; q < h2_func.size() - 1; q++) {
+    for (size_t q = 1; q < h2_func.size() - 1; q++) {
         I += h2_func[q];
     }
 
@@ -120,7 +120,7 @@ double Trapezoids2() {
 double Simpson1() {
     double I{0.0};
 
-    for (unsigned int q = 1; q < h1_func.size() - 1; q++) {
+    for (size_t q = 1; q < h1_func.size() - 1; q++) {
         if (q % 2 != 0) {
             I += 4 * h1_func[q];
         } else {
@@ -134,7 +134,7 @@ double Simpson1() {
 double Simpson2() {
     double I{0.0};
 
-    for (unsigned int q = 1; q < h2_func.size() - 1; q++) {
+    for (size_t q = 1; q < h2_func.size() - 1; q++) {
         if (q % 2 != 0) {
             I += 4 * h2_func[q];
         } else {
@@ -169,6 +169,7 @@ int main() {
     results[5][2] = 2;
 
     {
+        // Подсчет интегралов и запись результатов
         auto start = chrono::system_clock::now();
 
         thread t1([&] { results[0][1] = Rectangles1(); });

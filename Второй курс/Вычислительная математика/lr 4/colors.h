@@ -36,7 +36,7 @@ namespace poly::color {
     const std::string BLUE    = "\x1B[34m";
     const std::string PURPLE  = "\x1B[35m";
     const std::string CYAN    = "\x1B[36m";
-    const std::string WHITE   = "\x1B[37m";
+    const std::string WHITE   = "\x1B[38m";
 
     const std::string BLINK_RESET     = "\x1B[38m";
     const std::string BLINK_OFF_RESET = "\x1B[39m";

@@ -1,5 +1,11 @@
 .DS_Store
-.ipynb_checkpoints
+
 *.docx
 *.doc
+
+*.out
+*.exe
+
 .idea
+.ipynb_checkpoints
+cmake-build-debug/
