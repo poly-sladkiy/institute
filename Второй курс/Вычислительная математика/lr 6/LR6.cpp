@@ -100,7 +100,6 @@ void RungeKutt(vector<vector<double>> &res, double x, double xn, double y, doubl
 }
 
 //-----------------------------------//Euler//------------------------------//
-
 void Euler(vector<vector<double>> &res, double x, double xn, double y, double h, int q)
 {
     //Добавляем в массив начальные условия
@@ -120,7 +119,6 @@ void Euler(vector<vector<double>> &res, double x, double xn, double y, double h,
 }
 
 //-----------------------//EulerRecalculation//----------------------------//
-
 void EulerRecalculation(vector<vector<double>> &res, double x, double xn, double y, double h, int q)
 {
     double recalculationY;
