@@ -3,6 +3,8 @@
 # MS Office
 *.docx
 *.doc
+*.xls
+*.xlsx
 
 # Execution files
 *.out
