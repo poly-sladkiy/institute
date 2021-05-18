@@ -1,11 +1,16 @@
 .DS_Store
 
+# MS Office
 *.docx
 *.doc
 
+# Execution files
 *.out
 *.exe
+*.class
+*.javac
 
+# IDE files
 .idea
 .ipynb_checkpoints
 cmake-build-debug/
