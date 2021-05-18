@@ -1,0 +1,54 @@
+#include <iostream>
+#include <iomanip>
+#include "NewtonSolution.h"
+
+/// Если я кому-то скинул этот код
+///     1. не говни
+///     2. есть мат в заголовках
+///     3. в заголовке нужно изменить размер массива
+///     4. соответсвенно изменить до куда циклам считать
+///     5. я не ебу как они считают, я пробовал разные
+///         конбинации (как циклам считать),
+///         пока не выбрал что-то нормальное
+
+
+int main() {
+    const std::vector<std::vector<double>> coord = {
+            {1.340, 4.25562},
+            {1.345, 4.35325},
+            {1.350, 4.45522},
+            {1.355, 4.56184},
+            {1.360, 4.67344},
+            {1.365, 4.79038},
+            {1.370, 4.91306},
+            {1.375, 5.04192},
+            {1.380, 5.17744},
+            {1.385, 5.32016},
+            {1.390, 5.47069},
+            {1.395, 5.62968},
+    };
+
+    auto first = atFirstDerivative(coord);
+    std::cout << "First derivative" << std::endl;
+    for (auto &i : first) {
+        std::cout << left
+                  << setprecision(4) << std::setw(7) << i[0]
+                  << "\t"
+                  << setprecision(5) << setw(5) << i[1]
+                  << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    auto second = atSecondDerivative(coord);
+    std::cout << "Second derivative" << std::endl;
+    for (auto &i : second) {
+        std::cout << left
+                  << setprecision(4) << std::setw(7) << i[0]
+                  << "\t"
+                  << setprecision(5) << setw(5) << i[1]
+                  << std::endl;
+    }
+
+    return 0;
+}
