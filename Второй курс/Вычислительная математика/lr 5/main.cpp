@@ -1,6 +1,8 @@
 #include <iostream>
 #include <iomanip>
+
 #include "NewtonSolution.h"
+#include "LagrangianSolution.h"
 
 /// Если я кому-то скинул этот код
 ///     1. не говни
@@ -28,7 +30,9 @@ int main() {
             {1.395, 5.62968},
     };
 
-    auto first = atFirstDerivative(coord);
+    std::cout << "\t\tNewton" << std::endl << std::endl;
+
+    auto first = newton::atFirstDerivative(coord);
     std::cout << "First derivative" << std::endl;
     for (auto &i : first) {
         std::cout << left
@@ -40,7 +44,7 @@ int main() {
 
     std::cout << std::endl;
 
-    auto second = atSecondDerivative(coord);
+    auto second = newton::atSecondDerivative(coord);
     std::cout << "Second derivative" << std::endl;
     for (auto &i : second) {
         std::cout << left
@@ -48,6 +52,32 @@ int main() {
                   << "\t"
                   << setprecision(5) << setw(5) << i[1]
                   << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    std::cout << "\t\tLagrangian" << std::endl << std::endl;
+
+    first = lagrangian::atFirstDerivative(coord);
+    std::cout << "First derivative" << std::endl;
+    for (auto &i : first) {
+        std::cout << left
+                  << setprecision(4) << std::setw(7) << i[0]
+                  << "\t"
+                  << setprecision(5) << setw(5) << i[1]
+                  << std::endl;
+    }
+
+    std::cout << std::endl;
+
+    second = lagrangian::atSecondDerivative(coord);
+    std::cout << "Second derivative" << std::endl;
+    for (auto &i : second) {
+        std::cout << left
+                  << setprecision(4) << std::setw(7) << i[0]
+                  << "\t"
+                  << setprecision(5) << setw(5) << i[1];
+        std::cout << endl;
     }
 
     return 0;

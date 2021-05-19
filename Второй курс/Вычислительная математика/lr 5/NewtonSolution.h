@@ -2,9 +2,6 @@
 
 using namespace std;
 
-using v = std::vector<double>;
-using vv = std::vector<std::vector<double>>;
-
 #ifndef LR_5_FACTORIAL
 #define LR_5_FACTORIAL
 
@@ -18,6 +15,10 @@ int factorial(int n) {
 #ifndef LR_5_NEWTON_SOLUTION_H
 #define LR_5_NEWTON_SOLUTION_H
 
+using v = std::vector<double>;
+using vv = std::vector<std::vector<double>>;
+
+namespace newton{
 /// Функция для нахождения конечных разностей
 vv atFiniteDifferences(const vv &coordinates) {
     vv finiteDifferences{};
@@ -150,8 +151,7 @@ vv atSecondDerivative(const vv &coordinates) {
     //Нахождение производных для первых 6ти членов
     //выделяем координаты необходимых точек
     vv tempArr(12, v(2));
-    for (int i = 0; i < 12; i++)
-    {
+    for (int i = 0; i < 12; i++) {
         tempArr[i][0] = coordinates[i][0];
         tempArr[i][1] = coordinates[i][1];
     }
@@ -159,16 +159,16 @@ vv atSecondDerivative(const vv &coordinates) {
     vv finiteDifference = atFiniteDifferences(tempArr);
 
     //Расчет производных по формуле
-    for (int i = 0; i < 12; i++)
-    {
+    for (int i = 0; i < 12; i++) {
         double t = (coordinates[i][0] - coordinates[0][0]) / h;
 
         resArr[i][0] = coordinates[i][0];
         resArr[i][1] = (finiteDifference.at(1).at(0)
                         + ((6.0 * t - 6.0) * finiteDifference.at(2).at(0) / factorial(3))
-                        + ((12.0*t*t - 36.0*t + 22.0) * finiteDifference.at(3).at(0) / factorial(4)
-                           + ((20.0*t*t*t - 120.0*t*t + 210.0*t - 100.0) * finiteDifference.at(4).at(0)) / factorial(5)))
-                       / (h*h);
+                        + ((12.0 * t * t - 36.0 * t + 22.0) * finiteDifference.at(3).at(0) / factorial(4)
+                           + ((20.0 * t * t * t - 120.0 * t * t + 210.0 * t - 100.0) * finiteDifference.at(4).at(0)) /
+                             factorial(5)))
+                       / (h * h);
     }
 
     /// Я тоже не ебу зачем ещё цикл, влад почему-то считает
@@ -202,4 +202,5 @@ vv atSecondDerivative(const vv &coordinates) {
     return resArr;
 }
 
+}
 #endif //LR_5_NEWTON_SOLUTION_H

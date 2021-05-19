@@ -3,4 +3,4 @@ project(lr_5)
 
 set(CMAKE_CXX_STANDARD 17)
 
-add_executable(lr_5 main.cpp NewtonSolution.h)
+add_executable(lr_5 main.cpp NewtonSolution.h LagrangianSolution.h)
