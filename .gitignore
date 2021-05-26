@@ -1,3 +1,4 @@
+# Macintosh files
 .DS_Store
 
 # MS Office
@@ -16,3 +17,8 @@
 .idea
 .ipynb_checkpoints
 cmake-build-debug/
+
+# Archives
+*.zip
+*.rar
+*.tar*
