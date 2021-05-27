@@ -1,9 +1,10 @@
 #include <iostream>
 #include <iomanip>
 
+#include "poly/logotype.h"
+
 #include "NewtonSolution.h"
 #include "LagrangianSolution.h"
-
 
 int main() {
 
