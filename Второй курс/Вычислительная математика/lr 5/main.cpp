@@ -6,6 +6,9 @@
 
 
 int main() {
+
+    std::cout << logotype << std::endl << std::endl;
+
     const std::vector<std::vector<double>> coord = {
             {1.340, 4.25562},
             {1.345, 4.35325},
@@ -25,7 +28,7 @@ int main() {
 
     auto first = newton::atFirstDerivative(coord);
     std::cout << "First derivative" << std::endl;
-    for (auto &i : first) {
+    for (const auto &i : first) {
         std::cout << left
                   << setprecision(4) << std::setw(7) << i[0]
                   << "\t"
@@ -37,7 +40,7 @@ int main() {
 
     auto second = newton::atSecondDerivative(coord);
     std::cout << "Second derivative" << std::endl;
-    for (auto &i : second) {
+    for (const auto &i : second) {
         std::cout << left
                   << setprecision(4) << std::setw(7) << i[0]
                   << "\t"
@@ -51,7 +54,7 @@ int main() {
 
     first = lagrangian::atFirstDerivative(coord);
     std::cout << "First derivative" << std::endl;
-    for (auto &i : first) {
+    for (const auto &i : first) {
         std::cout << left
                   << setprecision(4) << std::setw(7) << i[0]
                   << "\t"
@@ -63,7 +66,7 @@ int main() {
 
     second = lagrangian::atSecondDerivative(coord);
     std::cout << "Second derivative" << std::endl;
-    for (auto &i : second) {
+    for (const auto &i : second) {
         std::cout << left
                   << setprecision(4) << std::setw(7) << i[0]
                   << "\t"
