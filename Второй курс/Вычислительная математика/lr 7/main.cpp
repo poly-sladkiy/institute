@@ -1,4 +1,5 @@
 ﻿#include <iostream>
+#include <iomanip>
 
 using namespace std;
 
@@ -145,7 +146,7 @@ void calculationEigenvalues(double(&p)[4], double(&a)[4]) { // Считаем с
     }
     cout << "Собственные числа:" << endl;
     for (int i = 0; i < 4; i++) {
-        cout << "lambda_" << i << ": " << a[i] << endl;
+        cout << std::fixed << std::setprecision(4) << "lambda_" << i << ": " << a[i] << endl;
     }
     cout << endl;
 }
@@ -179,7 +180,7 @@ void calculationEigenvectors(double (&Y)[4][5], double (&p)[4], double (&a)[4]) 
 
         cout << endl << "V" << i + 1 << ":" << endl << "{\t";
         for (double x : X) {
-                cout << x << ",\t";
+                cout << std::fixed << std::setprecision(3) << x << ",\t";
         }
         cout << "}" << endl;
     }
