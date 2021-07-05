@@ -22,3 +22,7 @@ cmake-build-debug/
 *.zip
 *.rar
 *.tar*
+
+# User's files
+Практика
+
