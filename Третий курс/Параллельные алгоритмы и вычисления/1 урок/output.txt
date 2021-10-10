@@ -1,0 +1,2 @@
+Testing stream sys.stdin.
+Enter a number > Enter a number > Enter a number > Enter a number > Enter a number > Enter a number > Bye
