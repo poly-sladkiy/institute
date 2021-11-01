@@ -1,19 +1,20 @@
 from multiprocessing import cpu_count
 import threading
-import math
+from math import factorial
 
 CPU = cpu_count()
 
 res = 0
 
+
 def function(x: float, n: int) -> float:
-    return float(x) ** n / math.fact(n)
+    return float(x) ** n / factorial(n)
 
 
 class Calc:
     def __init__(self, func, x: float, n_start: int, n_end: int):
         if n_end < n_start:
-            raise Exeption('End have to be more than start')
+            raise ValueError('End have to be more than start')
         
         self.func = func
         self.x = x
@@ -27,29 +28,28 @@ class Calc:
         for n in range(self.n_start, self.n_end):
             res += self.func(x, n)
 
-    def getRes(self):
-        return self._res
 
-
-x = input('Enter x> ')
+x = float(input('Enter x> '))
 n = 100
 
-c = Calc(function, x, 0, 100)
+# x = 1.3 -> 3.669296667619244
+# Calc(function, x, 0, n)()
 
-# args = []
-# for _ in range(CPU + 1):
-#     args.append(int((n / CPU) * _))
+# x = 1.3 -> 3.669296667619244
+args = []
+for _ in range(CPU + 1):
+    args.append(int((n / CPU) * _))
 
-# threads = []
-# for i in range(CPU):
-#     t = threading.Thread(target=Calc(function, x, args[i], args[i + 1]), args=())
-#     threads.append(t)
+threads = []
+for i in range(CPU):
+    t = threading.Thread(target=Calc(function, x, args[i], args[i + 1]), args=())
+    threads.append(t)
 
-# for thread in threads:
-#     thread.start()  # Запустить потоки на исполнение
+for thread in threads:
+    thread.start()  # Запустить потоки на исполнение
 
-# for thread in threads:
-#     thread.join()   # Ожидать завершения работы дочерних потоков
+for thread in threads:
+    thread.join()   # Ожидать завершения работы дочерних потоков
 
 
 print(f'Result: {res}\n',
