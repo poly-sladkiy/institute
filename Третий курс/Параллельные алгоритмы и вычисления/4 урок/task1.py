@@ -4,6 +4,7 @@ from multiprocessing import cpu_count
 
 
 CPU = cpu_count()
+
 res = 0
 
 
@@ -27,6 +28,8 @@ class Calc:
         for n in range(self.n_start, self.n_end):
             res += self.func(self.x, n)
 
+    def getRes(self):
+        return self._res
 
 def main():
     x = float(input('Enter x> '))
