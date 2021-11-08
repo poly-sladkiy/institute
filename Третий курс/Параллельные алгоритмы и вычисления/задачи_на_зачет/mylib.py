@@ -1,18 +1,27 @@
-from threading import Thread
+from random import random, seed
 
 
-class ThreadWithReturnValue(Thread):
+def create_matrix(n: int = None, sd: int = None) -> list:
+    if sd is not None:
+        seed(sd)
 
-    def __init__(self, group=None, target=None, name=None,
-                 args=(), kwargs={}, Verbose=None):
-        Thread.__init__(self, group, target, name, args, kwargs)
-        self._return = None
+    if n is None or n <= 0:
+        raise ValueError('N is bad arg.')
 
-    def run(self):
-        if self._target is not None:
-            self._return = self._target(*self._args,
-                                        **self._kwargs)
+    else:
+        res = []
 
-    def join(self, *args):
-        Thread.join(self, *args)
-        return self._return
+        for i in range(n):
+            res.append([])
+            for _ in range(n):
+                res[i].append(random())
+
+    return res
+
+
+def solution(indexes: list, data):
+    for sets in indexes:
+        for i in sets:
+            for j in range(len(data) - 1 - i):
+                data[i][j], data[len(data) - j - 1][len(data) - i - 1] = data[len(data) - j - 1][
+                                                                             len(data) - i - 1], data[i][j]
