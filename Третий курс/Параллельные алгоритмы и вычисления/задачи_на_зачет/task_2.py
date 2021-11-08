@@ -23,25 +23,12 @@ def create_matrix(n: int = None, sd: int = None) -> list:
     return res
 
 
-def my_max(arr: list):
-    if len(arr) == 1:
-        return arr[0]
-    else:
-        max_elem = arr[0]
-
-        for i in arr[1:]:
-            if i > max_elem:
-                max_elem = i
-
-        return max_elem
-
-
-def iter_upper_main_diagonal(mtrx: list):
+def iter_under_secondary_diagonal(mtrx: list):
     if len(mtrx) != len(mtrx[0]):
         raise ValueError('mtrx should be square.')
 
     iter = 0
-    for row in mtrx:
+    for row in mtrx[::-1]:
         yield row[iter:]
         iter += 1
 
@@ -49,12 +36,13 @@ def iter_upper_main_diagonal(mtrx: list):
 def solution(data, res: list):
     if len(data) == 1:
         res.append(data[0])
+
     elif len(data) > 1:
-        _max = data[0]
+        _min = data[0]
         for i in data[1:]:
-            if i > _max:
-                _max = i
-        res.append(_max)
+            if i < _min:
+                _min = i
+        res.append(_min)
 
 
 def th_calc(rows, results):
@@ -69,7 +57,7 @@ def th_calc(rows, results):
 
             threads = []
             for i in range(CPU):
-                tr = Thread(target=solution, args=(row[intervals[i]:intervals[i+1]], results))
+                tr = Thread(target=solution, args=(row[intervals[i]:intervals[i + 1]], results))
                 threads.append(tr)
 
             for thread in threads:
@@ -83,18 +71,14 @@ def calc(rows, results):
         solution(row, results)
 
 
-CPU = cpu_count()
 size = 1000
 matrix = create_matrix(size, 42)
 
-data = list(iter_upper_main_diagonal(matrix))
-# for i in data:
-#     for j in i:
-#         print(f'{j:<10.5f}', end='')
-#     print()
+data = list(iter_under_secondary_diagonal(matrix))
 
 # Many threads
-print("Multithreading")
+CPU = cpu_count()
+print(f"Multithreading")
 res = []
 start = time()
 th_calc(data, res)
@@ -102,7 +86,7 @@ th_calc(data, res)
 answer = []
 solution(res, answer)
 print(f'Time: {time() - start}')
-print(f"Result: {answer[0]}\n")
+print(f"Result: {answer[0]:.10f}\n")
 
 # One thread
 print("Single thread")
@@ -113,4 +97,4 @@ calc(data, res)
 answer = []
 solution(res, answer)
 print(f'Time: {time() - start}')
-print(f"Result: {answer[0]}")
+print(f"Result: {answer[0]:.10f}")
