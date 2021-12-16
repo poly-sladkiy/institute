@@ -11,12 +11,12 @@ app = Flask(__name__)
 
 
 @app.route('/')
-async def hello_world():  # put application's code here
+def hello_world():  # put application's code here
     return '<h1>Welcome to XMessenger!</h1>'
 
 
 @app.route('/register', methods=['GET', 'POST'])
-async def register():
+def register():
     try:
         match request.method:
 
@@ -50,19 +50,21 @@ async def register():
                     error='',
                 )
 
-    except Exception as er:
-        print(f'[Error]: {er}')
+    except ... as er:
+        print(f'[Error]:')
 
         return jsonify(
             request='BAD',
-            error=f'{er}',
+            error='',
+            username=''
         )
 
 
 @app.route('/login', methods=['POST'])
-async def login():
+def login():
     try:
-        await check_user_agent(request)
+        # check_user_agent(request)
+
         username, password = request.form.get('username'), request.form.get('password')
 
         if User.select() \
@@ -81,25 +83,22 @@ async def login():
                 error='Incorrect login or password'
             )
 
-    except Exception as er:
-        print(f'[Error]: {er}')
+    except ... as er:
+        print(f'[Error]:')
 
-
-@app.route('/all_users', methods=['GET'])
-def all_users():
-    data = [i.username for i in User.select(User.username)]
-
-    return jsonify(
-        request='OK',
-        error='',
-        data=str(data)
-    )
+        return jsonify(
+            request='BAD',
+            error='',
+            username=''
+        )
 
 
 @app.route('/find_user', methods=['POST'])
 def find():
-    name = request.form.get('username')
     try:
+        # check_user_agent(request)
+
+        name = request.form.get('username')
         data = User.get(User.username == name)
 
         if data:
@@ -109,12 +108,12 @@ def find():
                 username=data.username
             )
 
-    except Exception as er:
-        print(f'[Error]: {er}')
+    except ... as er:
+        print(f'[Error]:')
 
         return jsonify(
             request='BAD',
-            error='User does not exist',
+            error='',
             username=''
         )
 
@@ -122,19 +121,6 @@ def find():
 @app.route('/all_msg', methods=['GET'])
 def all_messages():
     qs = [i for i in Message.select()]
-
-    # qs = Message.select()
-    #
-    # data = []
-    # for i in qs:
-    #     data.append(
-    #         str({
-    #             'from': i.from_user_id,
-    #             'to': i.to_user_id,
-    #             'msg': i.message,
-    #             'time': i.created_date,
-    #         })
-    #     )
 
     return jsonify(
         request='OK',
@@ -146,36 +132,38 @@ def all_messages():
 @app.route('/check_messages', methods=['GET'])
 def check():
     try:
-        qs = Message.select()\
+        # check_user_agent(request)
+
+        qs = Message.select() \
             .where(
-                (Message.from_user == request.args.get('username')) |
-                (Message.to_user == request.args.get('username'))
+            (Message.from_user == request.args.get('username')) |
+            (Message.to_user == request.args.get('username'))
         )
 
         data = []
         for msg in qs:
             data.append(
                 {
-                    'from': msg.from_user_id,
-                    'to': msg.to_user_id,
-                    'msg': msg.message,
-                    'time': msg.created_date.ctime()
+                    "from": str(msg.from_user_id),
+                    "to": str(msg.to_user_id),
+                    "msg": str(msg.message),
+                    "time": msg.created_date.ctime()
                 }
             )
 
         return jsonify(
-            request='OK',
-            error='',
-            data=str(data),
+            request="OK",
+            error="",
+            data=data,
         )
 
-    except Exception as er:
-        print(f'[Error]: {er}')
+    except ... as er:
+        print(f'[Error]:')
 
         return jsonify(
-            request='BAD',
-            error='',
-            data=''
+            request="BAD",
+            error="",
+            username=""
         )
 
 
@@ -188,6 +176,8 @@ def send():
     }
 
     try:
+        # check_user_agent(request)
+
         Message(
             from_user=request.form.get('from'),
             to_user=request.form.get('to'),
@@ -201,19 +191,18 @@ def send():
             to_user=data['to_user'],
         )
 
-    except Exception as er:
-        print(f'[Error]: {er}')
+    except ... as er:
+        print(f'[Error]:')
 
         return jsonify(
             request='BAD',
-            error='Error sent message',
-            from_user=data['from_user'],
-            to_user=data['to_user'],
+            error='',
+            username=''
         )
 
 
 if __name__ == '__main__':
     db = start_session()
 
-    app.run(debug=True, host='127.0.0.1', port=8080)
+    app.run(debug=False, host='127.0.0.1', port=8080)
     db.close()
