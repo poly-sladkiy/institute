@@ -52,6 +52,7 @@ async def register():
 
     except Exception as er:
         print(f'[Error]: {er}')
+
         return jsonify(
             request='BAD',
             error=f'{er}',
@@ -96,6 +97,35 @@ def all_users():
     )
 
 
+@app.route('/all_msg', methods=['GET'])
+def all_messages():
+
+    qs = Message.select()
+
+    data = []
+    for i in qs:
+        data.append(i)
+
+    # qs = Message.select()
+    #
+    # data = []
+    # for i in qs:
+    #     data.append(
+    #         str({
+    #             'from': i.from_user_id,
+    #             'to': i.to_user_id,
+    #             'msg': i.message,
+    #             'time': i.created_date,
+    #         })
+    #     )
+
+    return jsonify(
+        request='OK',
+        error='',
+        data=str(data)
+    )
+
+
 @app.route('/find_user', methods=['POST'])
 def find():
     name = request.form.get('username')
@@ -121,7 +151,34 @@ def find():
 
 @app.route('/check_messages', methods=['GET'])
 def check():
-    pass
+
+    # try:
+        qs = Message.select()\
+            .where(Message.to_user == request.form.get('username'))\
+            .where(Message.from_user == request.form.get('username'))
+
+        data = [
+            {
+                'from': i.from_user,
+                'to': i.to_user,
+                'msg': i.message,
+                'time': i.created_date
+            } for i in qs
+        ]
+
+        return jsonify(
+            request='OK',
+            error='',
+            data=data
+        )
+    # except Exception as er:
+        print(f'[Error]: {er}')
+
+        return jsonify(
+            request='BAD',
+            error='',
+            data=''
+        )
 
 
 @app.route('/send_to', methods=['POST'])
@@ -160,5 +217,5 @@ def send():
 if __name__ == '__main__':
     db = start_session()
 
-    # app.run(debug=True, host='127.0.0.1', port=8080)
+    app.run(debug=True, host='127.0.0.1', port=8080)
     db.close()
