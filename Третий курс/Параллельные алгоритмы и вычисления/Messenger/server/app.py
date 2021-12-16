@@ -70,12 +70,8 @@ async def login():
                 .where(User.password == conf_password(password))\
                 .count() > 0:
 
-            session = conf_password(f'{username}-{time.time()}')
-            User.select().where(User.username == username).session = session
-
             return jsonify(
                 request='OK',
-                key=session,
                 error=''
             )
 
@@ -85,18 +81,84 @@ async def login():
                 error='Incorrect login or password'
             )
 
-    except Exception as e:
-        print(f'[Error]: {e}')
+    except Exception as er:
+        print(f'[Error]: {er}')
 
 
-@app.route('/messenger/<string:msgr_id>', methods=['GET', 'POST'])
-def send(msgr_id):
+@app.route('/all_users', methods=['GET'])
+def all_users():
+    data = [i.username for i in User.select(User.username)]
 
+    return jsonify(
+        request='OK',
+        error='',
+        data=str(data)
+    )
+
+
+@app.route('/find_user', methods=['POST'])
+def find():
+    name = request.form.get('username')
+    try:
+        data = User.get(User.username == name)
+
+        if data:
+            return jsonify(
+                request='OK',
+                error='',
+                username=data.username
+            )
+
+    except Exception as er:
+        print(f'[Error]: {er}')
+
+        return jsonify(
+            request='BAD',
+            error='User does not exist',
+            username=''
+        )
+
+
+@app.route('/check_messages', methods=['GET'])
+def check():
     pass
+
+
+@app.route('/send_to', methods=['POST'])
+def send():
+    data = {
+        'from_user': request.form.get('from'),
+        'to_user': request.form.get('to'),
+        'message': request.form.get('msg')
+    }
+
+    try:
+        Message(
+            from_user=request.form.get('from'),
+            to_user=request.form.get('to'),
+            message=request.form.get('msg')
+        ).save()
+
+        return jsonify(
+            request='OK',
+            error='',
+            from_user=data['from_user'],
+            to_user=data['to_user'],
+        )
+
+    except Exception as er:
+        print(f'[Error]: {er}')
+
+        return jsonify(
+            request='BAD',
+            error='Error sent message',
+            from_user=data['from_user'],
+            to_user=data['to_user'],
+        )
 
 
 if __name__ == '__main__':
     db = start_session()
 
-    app.run(debug=True, host='127.0.0.1', port=8080)
+    # app.run(debug=True, host='127.0.0.1', port=8080)
     db.close()

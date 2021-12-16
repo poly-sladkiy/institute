@@ -24,7 +24,6 @@ class BaseModel(Model):
 class User(BaseModel):
     username = CharField(unique=True)
     password = CharField()
-    session = CharField(null=True)
 
 
 class Message(BaseModel):
