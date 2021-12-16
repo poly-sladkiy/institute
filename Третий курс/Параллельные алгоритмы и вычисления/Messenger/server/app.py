@@ -61,14 +61,13 @@ async def register():
 
 @app.route('/login', methods=['POST'])
 async def login():
-
     try:
         await check_user_agent(request)
         username, password = request.form.get('username'), request.form.get('password')
 
-        if User.select()\
-                .where(User.username == username)\
-                .where(User.password == conf_password(password))\
+        if User.select() \
+                .where(User.username == username) \
+                .where(User.password == conf_password(password)) \
                 .count() > 0:
 
             return jsonify(
@@ -89,35 +88,6 @@ async def login():
 @app.route('/all_users', methods=['GET'])
 def all_users():
     data = [i.username for i in User.select(User.username)]
-
-    return jsonify(
-        request='OK',
-        error='',
-        data=str(data)
-    )
-
-
-@app.route('/all_msg', methods=['GET'])
-def all_messages():
-
-    qs = Message.select()
-
-    data = []
-    for i in qs:
-        data.append(i)
-
-    # qs = Message.select()
-    #
-    # data = []
-    # for i in qs:
-    #     data.append(
-    #         str({
-    #             'from': i.from_user_id,
-    #             'to': i.to_user_id,
-    #             'msg': i.message,
-    #             'time': i.created_date,
-    #         })
-    #     )
 
     return jsonify(
         request='OK',
@@ -149,29 +119,57 @@ def find():
         )
 
 
+@app.route('/all_msg', methods=['GET'])
+def all_messages():
+    qs = [i for i in Message.select()]
+
+    # qs = Message.select()
+    #
+    # data = []
+    # for i in qs:
+    #     data.append(
+    #         str({
+    #             'from': i.from_user_id,
+    #             'to': i.to_user_id,
+    #             'msg': i.message,
+    #             'time': i.created_date,
+    #         })
+    #     )
+
+    return jsonify(
+        request='OK',
+        error='',
+        data=str(qs)
+    )
+
+
 @app.route('/check_messages', methods=['GET'])
 def check():
-
-    # try:
+    try:
         qs = Message.select()\
-            .where(Message.to_user == request.form.get('username'))\
-            .where(Message.from_user == request.form.get('username'))
+            .where(
+                (Message.from_user == request.args.get('username')) |
+                (Message.to_user == request.args.get('username'))
+        )
 
-        data = [
-            {
-                'from': i.from_user,
-                'to': i.to_user,
-                'msg': i.message,
-                'time': i.created_date
-            } for i in qs
-        ]
+        data = []
+        for msg in qs:
+            data.append(
+                {
+                    'from': msg.from_user_id,
+                    'to': msg.to_user_id,
+                    'msg': msg.message,
+                    'time': msg.created_date
+                }
+            )
 
         return jsonify(
             request='OK',
             error='',
-            data=data
+            data=str(data),
         )
-    # except Exception as er:
+
+    except Exception as er:
         print(f'[Error]: {er}')
 
         return jsonify(
