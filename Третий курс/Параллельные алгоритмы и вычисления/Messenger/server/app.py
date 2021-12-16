@@ -169,12 +169,6 @@ def check():
 
 @app.route('/send_to', methods=['POST'])
 def send():
-    data = {
-        'from_user': request.form.get('from'),
-        'to_user': request.form.get('to'),
-        'message': request.form.get('msg')
-    }
-
     try:
         # check_user_agent(request)
 
@@ -187,8 +181,8 @@ def send():
         return jsonify(
             request='OK',
             error='',
-            from_user=data['from_user'],
-            to_user=data['to_user'],
+            from_user=request.form.get('from'),
+            to_user=request.form.get('to'),
         )
 
     except ... as er:
