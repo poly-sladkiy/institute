@@ -13,6 +13,7 @@ db = SqliteDatabase('db.sqlite')
 def start_session():
     db.connect()
     db.create_tables([User, Message])
+
     return db
 
 
