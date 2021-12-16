@@ -101,20 +101,20 @@ def new_find_win():
 
 def new_dialog1_win():
     layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter messege', key = 'd1_messege_key')],
-              [sg.Button('Send')]]
+              [sg.InputText('Enter message', key = 'd1_message_key')],
+              [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 1', layout, finalize=True)
 
 def new_dialog2_win():
     layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter messege', key = 'd2_messege_key')],
-              [sg.Button('Send')]]
+              [sg.InputText('Enter message', key = 'd2_message_key')],
+              [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 2', layout, finalize=True)
 
 def new_dialog3_win():
     layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter messege', key = 'd3_messege_key')],
-              [sg.Button('Send')]]
+              [sg.InputText('Enter message', key = 'd3_message_key')],
+              [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
 startup_win, log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win = new_startup_win(), None, None, None, None, None
@@ -189,16 +189,54 @@ while True:             # Event Loop
     
     elif event == 'Send':
         if dialog1_win:
-            print(username + ': ' + values['d1_messege_key'])
-            print(companion_username + 'Fuck you, gay')
+            print(username + ': ' + values['d1_message_key'])
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d1_message_key']})
 
         elif dialog2_win:
-            print(username + ': ' + values['d2_messege_key'])
-            print(companion_username + 'Fuck you, gay')
+            print(username + ': ' + values['d2_message_key'])
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d2_message_key']})
 
         elif dialog3_win:
-            print(username + ': ' + values['d3_messege_key'])
-            print(companion_username + ': ' + 'Fuck you, gay')
+            print(username + ': ' + values['d3_message_key'])
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d3_message_key']})
+
+
+    elif event == 'Check messages':
+        if dialog1_win:
+            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+            data = json.loads(r.content.decode('utf-8'))
+
+            if data['request'] == 'OK':
+                for msg in data['data']:
+                    if msg['from'] == companion_username:
+                        print(companion_username + ': ' + msg['msg'])
+
+            elif data['request'] == 'BAD':
+                window['f_output_err'].update('User not found')
+
+        elif dialog2_win:
+            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+            data = json.loads(r.content.decode('utf-8'))
+
+            if data['request'] == 'OK':
+                for msg in data['data']:
+                    if msg['from'] == companion_username:
+                        print(companion_username + ': ' + msg['msg'])
+
+            elif data['request'] == 'BAD':
+                window['f_output_err'].update('User not found')
+
+        elif dialog3_win:
+            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+            data = json.loads(r.content.decode('utf-8'))
+
+            if data['request'] == 'OK':
+                for msg in data['data']:
+                    if msg['from'] == companion_username:
+                        print(companion_username + ': ' + msg['msg'])
+
+            elif data['request'] == 'BAD':
+                window['f_output_err'].update('User not found')
         
 
 window.close()
