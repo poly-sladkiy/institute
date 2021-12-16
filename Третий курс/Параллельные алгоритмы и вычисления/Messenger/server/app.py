@@ -159,7 +159,7 @@ def check():
                     'from': msg.from_user_id,
                     'to': msg.to_user_id,
                     'msg': msg.message,
-                    'time': msg.created_date
+                    'time': msg.created_date.ctime()
                 }
             )
 
