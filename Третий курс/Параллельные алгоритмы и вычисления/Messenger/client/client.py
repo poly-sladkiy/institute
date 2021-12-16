@@ -1,75 +1,3 @@
-# import PySimpleGUI as sg
-# layout = [
-#     [sg.Text('File 1'), sg.InputText(), sg.FileBrowse(),
-#      sg.Checkbox('MD5'), sg.Checkbox('SHA1')
-#      ],
-#     [sg.Text('File 2'), sg.InputText(), sg.FileBrowse(),
-#      sg.Checkbox('SHA256')
-#      ],
-#     [sg.Output(size=(88, 20))],
-#     [sg.Submit(), sg.Cancel()]
-# ]
-# window = sg.Window('File Compare', layout)
-# while True:                             # The Event Loop
-#     event, values = window.read()
-#     # print(event, values) #debug
-#     if event in (None, 'Exit', 'Cancel'):
-#         break
-
-
-# import PySimpleGUI as sg
-
-# sg.theme('BluePurple')
-
-# layout_1 = [[sg.Text('That is layout_1')],
-#           [sg.Button('Go on layout_2'), sg.Button('Exit')]]
-
-# layout_2 = [[sg.Text('That is layout_2')],
-#           [sg.Button('Go on layout_1'), sg.Button('Exit')]]
-
-# window = sg.Window('layout_1', layout_1)
-
-# while True:  # Event Loop
-#     event, values = window.read()
-#     if event == sg.WIN_CLOSED or event == 'Exit':
-#         break
-
-#     if event == 'Go on layout_2':
-#         window.close()
-#         window = sg.Window('layout_2', layout_2)
-
-#     if event == 'Go on layout_1':
-#         window.close()
-#         window = sg.Window('layout_1', layout_1)
-
-# window.close()
-
-
-# import PySimpleGUI as sg
-# def open_window():
-#     layout = [[sg.Text("New Window", key="new")]]
-#     window = sg.Window("Second Window", layout, modal=True)
-#     choice = None
-#     while True:
-#         event, values = window.read()
-#         if event == "Exit" or event == sg.WIN_CLOSED:
-#             break
-        
-#     window.close()
-# def main():
-#     layout = [[sg.Button("Open Window", key="open")]]
-#     window = sg.Window("Main Window", layout)
-#     while True:
-#         event, values = window.read()
-#         if event == "Exit" or event == sg.WIN_CLOSED:
-#             break
-#         if event == "open":
-#             open_window()
-        
-#     window.close()
-# if __name__ == "__main__":
-#     main()
-
 import PySimpleGUI as sg
 import requests
 import json
@@ -190,15 +118,15 @@ while True:             # Event Loop
     elif event == 'Send':
         if dialog1_win:
             print(username + ': ' + values['d1_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d1_message_key']})
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d1_message_key']})
 
         elif dialog2_win:
             print(username + ': ' + values['d2_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d2_message_key']})
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d2_message_key']})
 
         elif dialog3_win:
             print(username + ': ' + values['d3_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from_user': username, 'to_user': companion_username, 'message': values['d3_message_key']})
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d3_message_key']})
 
 
     elif event == 'Check messages':
