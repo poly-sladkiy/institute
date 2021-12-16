@@ -71,14 +71,13 @@
 #     main()
 
 import PySimpleGUI as sg
+import requests
+import json
 
-"""
-    Demo - 2 simultaneous windows using read_all_window
-    Window 1 launches window 2
-    BOTH remain active in parallel
-    Both windows have buttons to launch popups.  The popups are "modal" and thus no other windows will be active
-    Copyright 2020 PySimpleGUI.org
-"""
+HOST = '127.0.0.1'
+PORT = 8080
+username = ''
+companion_username = ''
 
 def new_startup_win():
     layout = [[sg.Text('Welcome! Please, Sign in or Log in if you already have account')],
@@ -88,14 +87,16 @@ def new_startup_win():
 def new_log_reg_win():
     layout = [[sg.Text('Login:'), sg.InputText(key = 'l_r_login_key')],
               [sg.Text('Password:'), sg.InputText(key = 'l_r_password_key')],
-              [sg.Radio('Log in', '1', default = True), sg.Radio('Sign in', '1', default = False)],
-              [sg.Button('Submit')]]
+              [sg.Radio('Log in', '1', default = True, key = 'l_r_radio_log_key'), sg.Radio('Sign in', '1', default = False)],
+              [sg.Button('Submit')],
+              [sg.Text(size=(15,1), key='l_r_output_err')]]
     return sg.Window('Log/Reg', layout, finalize=True) 
 
 def new_find_win():
     layout = [[sg.Text('Find User')],
               [sg.InputText('admin', key = 'f_username_key')],
-              [sg.Button('Find')]]
+              [sg.Button('Find')],
+              [sg.Text(size=(15,1), key='f_output_err')]]
     return sg.Window('Find User', layout, finalize=True) 
 
 def new_dialog1_win():
@@ -142,27 +143,62 @@ while True:             # Event Loop
         log_reg_win = new_log_reg_win()
 
     elif event == 'Submit' and not find_win:
-        window.close()
-        log_reg_win = None
-        find_win = new_find_win()
+        if values['l_r_radio_log_key'] == True:
+            
+            r = requests.post(f'http://{HOST}:{PORT}/login', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
+            data = json.loads(r.content.decode('utf-8'))
+            
+            if data['request'] == 'OK':
+                username = values['l_r_login_key']
+                window.close()
+                log_reg_win = None
+                find_win = new_find_win()
+
+            elif data['request'] == 'BAD':
+                window['l_r_output_err'].update('User not found')
+        else:
+            r = requests.post(f'http://{HOST}:{PORT}/register', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
+            data = json.loads(r.content.decode('utf-8'))
+            
+            if data['request'] == 'OK':
+                username = values['l_r_login_key']
+                window.close()
+                log_reg_win = None
+                find_win = new_find_win()
+
+            elif data['request'] == 'BAD':
+                window['l_r_output_err'].update('Something wrong')
+        
 
     elif event == 'Find':
-        if not dialog1_win:
-            dialog1_win = new_dialog1_win()
-        elif not dialog2_win:
-            dialog2_win = new_dialog2_win()
-        elif not dialog3_win:
-            dialog2_win = new_dialog3_win()
+        r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
+        data = json.loads(r.content.decode('utf-8'))
+        
+        if data['request'] == 'OK':
+                companion_username = values['f_username_key']
+                if not dialog1_win:
+                    dialog1_win = new_dialog1_win()
+                elif not dialog2_win:
+                    dialog2_win = new_dialog2_win()
+                elif not dialog3_win:
+                    dialog2_win = new_dialog3_win()
+
+        elif data['request'] == 'BAD':
+            window['f_output_err'].update('User not found')
+        
     
     elif event == 'Send':
-        if dialog1_win.ac:
-            print(values['d1_messege_key'])
+        if dialog1_win:
+            print(username + ': ' + values['d1_messege_key'])
+            print(companion_username + 'Fuck you, gay')
 
         elif dialog2_win:
-            print(values['d2_messege_key'])
+            print(username + ': ' + values['d2_messege_key'])
+            print(companion_username + 'Fuck you, gay')
 
         elif dialog3_win:
-            print(values['d3_messege_key'])
+            print(username + ': ' + values['d3_messege_key'])
+            print(companion_username + ': ' + 'Fuck you, gay')
         
 
 window.close()
