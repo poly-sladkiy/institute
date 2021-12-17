@@ -71,7 +71,7 @@ def check_msg(n):
         window['d' + str(n) + '_output'].update('')
         for msg in data['data']:
             if msg['from'] == companion_username:
-                print(companion_username + ': ' + msg['msg'])
+                print('[' + data['time'] + '] ' + companion_username + ': ' + msg['msg'])
             if (msg['from'] == username) and (msg['to'] == companion_username):
                 print(username + ': ' + msg['msg'])
 
