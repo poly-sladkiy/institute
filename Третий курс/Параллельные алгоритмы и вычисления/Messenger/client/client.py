@@ -4,6 +4,8 @@ import json
 
 HOST = '127.0.0.1'
 PORT = 8080
+# HOST = '324b-136-169-215-221.ngrok.io'
+# PORT = 80
 username = ''
 companion_username = ''
 
@@ -11,6 +13,13 @@ def new_startup_win():
     layout = [[sg.Text('Welcome! Please, Sign in or Log in if you already have account')],
               [sg.Button('Start chatting')]]
     return sg.Window('Autorization', layout, finalize=True)
+
+def new_connection_win():
+    layout = [[sg.Text('Host:'), sg.InputText(key = 'c_host_key')],
+              [sg.Text('Port:'), sg.InputText(key = 'c_port_key')],
+              [sg.Button('Connect')],
+              [sg.Text(size=(15,1), key='c_output_err')]]
+    return sg.Window('Log/Reg', layout, finalize=True) 
 
 def new_log_reg_win():
     layout = [[sg.Text('Login:'), sg.InputText(key = 'l_r_login_key')],
@@ -22,30 +31,30 @@ def new_log_reg_win():
 
 def new_find_win():
     layout = [[sg.Text('Find User')],
-              [sg.InputText('admin', key = 'f_username_key')],
+              [sg.InputText('', key = 'f_username_key')],
               [sg.Button('Find')],
               [sg.Text(size=(15,1), key='f_output_err')]]
     return sg.Window('Find User', layout, finalize=True) 
 
 def new_dialog1_win():
-    layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter message', key = 'd1_message_key')],
+    layout = [[sg.Output(size=(88, 20), key = 'd1_output')],
+              [sg.InputText('Enter message', key = 'd1_message_key', do_not_clear = False)],
               [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 1', layout, finalize=True)
 
 def new_dialog2_win():
-    layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter message', key = 'd2_message_key')],
+    layout = [[sg.Output(size=(88, 20), key = 'd2_output')],
+              [sg.InputText('Enter message', key = 'd2_message_key', do_not_clear = False)],
               [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 2', layout, finalize=True)
 
 def new_dialog3_win():
-    layout = [[sg.Output(size=(88, 20))],
-              [sg.InputText('Enter message', key = 'd3_message_key')],
+    layout = [[sg.Output(size=(88, 20), key = 'd3_output')],
+              [sg.InputText('Enter message', key = 'd3_message_key', do_not_clear = False)],
               [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
-startup_win, log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win = new_startup_win(), None, None, None, None, None
+startup_win, connection_win,  log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win = new_startup_win(), None, None, None, None, None, None
 
 while True:             # Event Loop
     window, event, values = sg.read_all_windows()
@@ -56,6 +65,8 @@ while True:             # Event Loop
             break
         elif window == startup_win:
             startup_win = None
+        elif window == connection_win:
+            connection_win = None
         elif window == log_reg_win:
             log_reg_win = None
         elif window == find_win:
@@ -135,36 +146,42 @@ while True:             # Event Loop
             data = json.loads(r.content.decode('utf-8'))
 
             if data['request'] == 'OK':
+                window['d1_output'].update('')
                 for msg in data['data']:
                     if msg['from'] == companion_username:
                         print(companion_username + ': ' + msg['msg'])
 
             elif data['request'] == 'BAD':
-                window['f_output_err'].update('User not found')
+                window['d1_output'].update('')
+                print('FATAL ERROR! Nobody wants to write you')
 
         elif dialog2_win:
             r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
             data = json.loads(r.content.decode('utf-8'))
 
             if data['request'] == 'OK':
+                window['d2_output'].update('')
                 for msg in data['data']:
                     if msg['from'] == companion_username:
                         print(companion_username + ': ' + msg['msg'])
 
             elif data['request'] == 'BAD':
-                window['f_output_err'].update('User not found')
+                window['d2_output'].update('')
+                print('FATAL ERROR! Nobody wants to write you')
 
         elif dialog3_win:
             r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
             data = json.loads(r.content.decode('utf-8'))
 
             if data['request'] == 'OK':
+                window['d3_output'].update('')
                 for msg in data['data']:
                     if msg['from'] == companion_username:
                         print(companion_username + ': ' + msg['msg'])
 
             elif data['request'] == 'BAD':
-                window['f_output_err'].update('User not found')
+                window['d3_output'].update('')
+                print('FATAL ERROR! Nobody wants to write you')
         
 
 window.close()
