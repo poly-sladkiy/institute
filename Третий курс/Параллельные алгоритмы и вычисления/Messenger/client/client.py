@@ -4,10 +4,11 @@ import json
 
 HOST = '127.0.0.1'
 PORT = 8080
-# HOST = '324b-136-169-215-221.ngrok.io'
-# PORT = 80
 username = ''
 companion_username = ''
+
+
+# --------------------| Windows |-------------------- #
 
 def new_startup_win():
     layout = [[sg.Text('Welcome! Please, Sign in or Log in if you already have account')],
@@ -17,9 +18,10 @@ def new_startup_win():
 def new_connection_win():
     layout = [[sg.Text('Host:'), sg.InputText(key = 'c_host_key')],
               [sg.Text('Port:'), sg.InputText(key = 'c_port_key')],
+              [sg.Checkbox('Default', key = 'c_cb')],
               [sg.Button('Connect')],
               [sg.Text(size=(15,1), key='c_output_err')]]
-    return sg.Window('Log/Reg', layout, finalize=True) 
+    return sg.Window('Connection', layout, finalize=True) 
 
 def new_log_reg_win():
     layout = [[sg.Text('Login:'), sg.InputText(key = 'l_r_login_key')],
@@ -54,6 +56,29 @@ def new_dialog3_win():
               [sg.Button('Send'), sg.Button('Check messages')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
+
+# --------------------| Functions |-------------------- #
+
+def send(n):
+    print(username + ': ' + values['d' + str(n) + '_message_key'])
+    r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
+
+def check_msg(n):
+    r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+    data = json.loads(r.content.decode('utf-8'))
+
+    if data['request'] == 'OK':
+        window['d' + str(n) + '_output'].update('')
+        for msg in data['data']:
+            if msg['from'] == companion_username:
+                print(companion_username + ': ' + msg['msg'])
+            if (msg['from'] == username) and (msg['to'] == companion_username):
+                print(username + ': ' + msg['msg'])
+
+    elif data['request'] == 'BAD':
+        window['d' + str(n) + '_output'].update('')
+        print('FATAL ERROR! Nobody wants to write you')
+
 startup_win, connection_win,  log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win = new_startup_win(), None, None, None, None, None, None
 
 while True:             # Event Loop
@@ -78,8 +103,25 @@ while True:             # Event Loop
         elif window == dialog3_win:
             dialog3_win = None
     
-    elif event == 'Start chatting' and not log_reg_win:
-        log_reg_win = new_log_reg_win()
+    elif event == 'Start chatting' and not connection_win:
+        connection_win = new_connection_win()
+
+
+    elif event == 'Connect' and not log_reg_win:
+        if values['c_cb'] == True:
+            window.close()
+            connection_win = None
+            log_reg_win = new_log_reg_win()
+        else:
+            if (values['c_host_key'] != '') and (values['c_port_key'] != ''):
+                HOST = values['c_host_key']
+                PORT = values['c_port_key']
+                window.close()
+                connection_win = None
+                log_reg_win = new_log_reg_win()
+            else:
+                window['c_output_err'].update('Empty field')
+
 
     elif event == 'Submit' and not find_win:
         if values['l_r_radio_log_key'] == True:
@@ -128,60 +170,24 @@ while True:             # Event Loop
     
     elif event == 'Send':
         if dialog1_win:
-            print(username + ': ' + values['d1_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d1_message_key']})
+            send(1)
 
         elif dialog2_win:
-            print(username + ': ' + values['d2_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d2_message_key']})
+            send(2)
 
         elif dialog3_win:
-            print(username + ': ' + values['d3_message_key'])
-            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d3_message_key']})
+            send(3)
 
 
     elif event == 'Check messages':
         if dialog1_win:
-            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
-            data = json.loads(r.content.decode('utf-8'))
-
-            if data['request'] == 'OK':
-                window['d1_output'].update('')
-                for msg in data['data']:
-                    if msg['from'] == companion_username:
-                        print(companion_username + ': ' + msg['msg'])
-
-            elif data['request'] == 'BAD':
-                window['d1_output'].update('')
-                print('FATAL ERROR! Nobody wants to write you')
+            check_msg(1)
 
         elif dialog2_win:
-            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
-            data = json.loads(r.content.decode('utf-8'))
-
-            if data['request'] == 'OK':
-                window['d2_output'].update('')
-                for msg in data['data']:
-                    if msg['from'] == companion_username:
-                        print(companion_username + ': ' + msg['msg'])
-
-            elif data['request'] == 'BAD':
-                window['d2_output'].update('')
-                print('FATAL ERROR! Nobody wants to write you')
+            check_msg(2)
 
         elif dialog3_win:
-            r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
-            data = json.loads(r.content.decode('utf-8'))
-
-            if data['request'] == 'OK':
-                window['d3_output'].update('')
-                for msg in data['data']:
-                    if msg['from'] == companion_username:
-                        print(companion_username + ': ' + msg['msg'])
-
-            elif data['request'] == 'BAD':
-                window['d3_output'].update('')
-                print('FATAL ERROR! Nobody wants to write you')
+            check_msg(3)
         
 
 window.close()
