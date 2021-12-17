@@ -6,6 +6,7 @@ HOST = '127.0.0.1'
 PORT = 8080
 username = ''
 companion_username = ''
+msg_arr = []
 
 
 # --------------------| Windows |-------------------- #
@@ -67,13 +68,24 @@ def check_msg(n):
     r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
     data = json.loads(r.content.decode('utf-8'))
 
+    msg_arr = []
     if data['request'] == 'OK':
         window['d' + str(n) + '_output'].update('')
         for msg in data['data']:
             if msg['from'] == companion_username:
-                print('[' + data['time'] + '] ' + companion_username + ': ' + msg['msg'])
+                msg_arr.append(msg)
+                # print('[' + data['time'] + '] ' + companion_username + ': ' + msg['msg'])
             if (msg['from'] == username) and (msg['to'] == companion_username):
-                print(username + ': ' + msg['msg'])
+                msg_arr.append(msg)
+                # print('[' + data['time'] + '] ' + username + ': ' + msg['msg'])
+
+        for a in sorted(msg_arr, key = lambda x: x['time']):
+            print('[' + a['time'] + '] ' + a['from'] + ': ' + a['msg'])
+
+        # for i in range(len(msg_arr)-1):
+        #     for j in range(len(msg_arr)-i-1):
+        #         if msg_arr[j]['time'] > msg_arr[j+1]['time']:
+        #             msg_arr[j]['time'], msg_arr[j+1]['time'] = msg_arr[j+1]['time'], msg_arr[j]['time']
 
     elif data['request'] == 'BAD':
         window['d' + str(n) + '_output'].update('')
