@@ -26,7 +26,7 @@ def new_connection_win():
 
 def new_log_reg_win():
     layout = [[sg.Text('Login:'), sg.InputText(key = 'l_r_login_key')],
-              [sg.Text('Password:'), sg.InputText(key = 'l_r_password_key')],
+              [sg.Text('Password:'), sg.InputText(key = 'l_r_password_key', password_char = '*')],
               [sg.Radio('Log in', '1', default = True, key = 'l_r_radio_log_key'), sg.Radio('Sign in', '1', default = False)],
               [sg.Button('Submit')],
               [sg.Text(size=(15,1), key='l_r_output_err')]]
@@ -42,19 +42,19 @@ def new_find_win():
 def new_dialog1_win():
     layout = [[sg.Output(size=(88, 20), key = 'd1_output')],
               [sg.InputText('Enter message', key = 'd1_message_key', do_not_clear = False)],
-              [sg.Button('Send'), sg.Button('Check messages')]]
+              [sg.Button('Send 1'), sg.Button('Check messages 1')]]
     return sg.Window('Dialog 1', layout, finalize=True)
 
 def new_dialog2_win():
     layout = [[sg.Output(size=(88, 20), key = 'd2_output')],
               [sg.InputText('Enter message', key = 'd2_message_key', do_not_clear = False)],
-              [sg.Button('Send'), sg.Button('Check messages')]]
+              [sg.Button('Send 2'), sg.Button('Check messages 2')]]
     return sg.Window('Dialog 2', layout, finalize=True)
 
 def new_dialog3_win():
     layout = [[sg.Output(size=(88, 20), key = 'd3_output')],
               [sg.InputText('Enter message', key = 'd3_message_key', do_not_clear = False)],
-              [sg.Button('Send'), sg.Button('Check messages')]]
+              [sg.Button('Send 3'), sg.Button('Check messages 3')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
 
@@ -180,26 +180,38 @@ while True:             # Event Loop
             window['f_output_err'].update('User not found')
         
     
-    elif event == 'Send':
-        if dialog1_win:
-            send(1)
+    # elif event == 'Send':
+    #     if dialog1_win:
+    #         send(1)
 
-        elif dialog2_win:
-            send(2)
+    #     elif dialog2_win:
+    #         send(2)
 
-        elif dialog3_win:
-            send(3)
+    #     elif dialog3_win:
+    #         send(3)
+    elif event == 'Send 1':
+        send(1)
+    elif event == 'Send 2':
+        send(2)
+    elif event == 'Send 3':
+        send(3)
 
+    elif event == 'Check messages 1':
+        check_msg(1)
+    elif event == 'Check messages 2':
+        check_msg(2)
+    elif event == 'Check messages 3':
+        check_msg(3)
 
-    elif event == 'Check messages':
-        if dialog1_win:
-            check_msg(1)
+    # elif event == 'Check messages':
+    #     if dialog1_win:
+    #         check_msg(1)
 
-        elif dialog2_win:
-            check_msg(2)
+    #     elif dialog2_win:
+    #         check_msg(2)
 
-        elif dialog3_win:
-            check_msg(3)
+    #     elif dialog3_win:
+    #         check_msg(3)
         
 
 window.close()
