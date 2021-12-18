@@ -7,6 +7,7 @@ PORT = 8080
 username = ''
 companion_username = ''
 msg_arr = []
+win_number = 0
 
 
 # --------------------| Windows |-------------------- #
@@ -110,10 +111,13 @@ while True:             # Event Loop
             find_win = None
         elif window == dialog1_win:
             dialog1_win = None
+            win_number -= 1
         elif window == dialog2_win:
             dialog2_win = None
+            win_number -= 1
         elif window == dialog3_win:
             dialog3_win = None
+            win_number -= 1
     
     elif event == 'Start chatting' and not connection_win:
         connection_win = new_connection_win()
@@ -164,20 +168,24 @@ while True:             # Event Loop
         
 
     elif event == 'Find':
-        r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
-        data = json.loads(r.content.decode('utf-8'))
-        
-        if data['request'] == 'OK':
-                companion_username = values['f_username_key']
-                if not dialog1_win:
-                    dialog1_win = new_dialog1_win()
-                elif not dialog2_win:
-                    dialog2_win = new_dialog2_win()
-                elif not dialog3_win:
-                    dialog2_win = new_dialog3_win()
+        if win_number != 3:
+            r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
+            data = json.loads(r.content.decode('utf-8'))
+            
+            if data['request'] == 'OK':
+                    companion_username = values['f_username_key']
+                    if not dialog1_win:
+                        win_number += 1
+                        dialog1_win = new_dialog1_win()
+                    elif not dialog2_win:
+                        win_number += 1
+                        dialog2_win = new_dialog2_win()
+                    elif not dialog3_win:
+                        win_number += 1
+                        dialog2_win = new_dialog3_win()
 
-        elif data['request'] == 'BAD':
-            window['f_output_err'].update('User not found')
+            elif data['request'] == 'BAD':
+                window['f_output_err'].update('User not found')
         
     
     # elif event == 'Send':
