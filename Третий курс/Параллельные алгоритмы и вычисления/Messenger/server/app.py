@@ -12,11 +12,25 @@ app = Flask(__name__)
 
 @app.route('/')
 def hello_world():  # put application's code here
+    """Home route
+
+    Returns:
+        (str): Welcome message
+    """    
     return '<h1>Welcome to XMessenger!</h1>'
 
 
 @app.route('/register', methods=['GET', 'POST'])
 def register():
+    """API for register
+
+    Args:
+        username (str): user
+        password (str): password
+
+    Returns:
+        (json): OK ar BAD request
+    """    
     try:
         match request.method:
 
@@ -82,6 +96,15 @@ def register():
 
 @app.route('/login', methods=['POST'])
 def login():
+    """API for login
+    
+    Args:
+        username (str): user
+        password (str): password
+
+    Returns:
+        (json): OK ar BAD login
+    """   
     try:
         # check_user_agent(request)
 
@@ -105,7 +128,7 @@ def login():
         print(f'[Error]: /login - {er}')
 
         return jsonify(
-            request='BAD',
+            request='BAD',  
             error=str(er),
             username=''
         )
@@ -122,6 +145,14 @@ def login():
 
 @app.route('/find_user', methods=['POST'])
 def find():
+    """Find user in DB
+
+    Args:
+        username (str): username for find
+
+    Returns:
+        (json): OK or BAD
+    """    
     try:
         # check_user_agent(request)
 
@@ -156,6 +187,11 @@ def find():
 
 @app.route('/all_msg', methods=['GET'])
 def all_messages():
+    """Use for checking messages in DB
+
+    Returns:
+        (json): json with all messages in DB
+    """    
     qs = [i for i in Message.select()]
 
     return jsonify(
@@ -167,6 +203,14 @@ def all_messages():
 
 @app.route('/check_messages', methods=['GET'])
 def check():
+    """User check messages for him
+
+    Args:
+        username (str): username
+
+    Returns:
+        (json): OK with messages or BAD with some errors
+    """    
     try:
         # check_user_agent(request)
 
@@ -214,6 +258,16 @@ def check():
 
 @app.route('/send_to', methods=['POST'])
 def send():
+    """Send message to some user
+
+    Args:
+        from (str): from user
+        to (str): to user
+        msg (str): content of message
+
+    Returns:
+        (json): OK messsage succesfuly send or BAD
+    """    
     try:
         # check_user_agent(request)
 
