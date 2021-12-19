@@ -78,6 +78,7 @@ startup_win, connection_win,  log_reg_win, find_win, dialog1_win, dialog2_win, d
 def send(n):
     try:
         if values['d' + str(n) + '_message_key'] != '':
+            window['d' + str(n) + '_output_err'].update('')
             print(username + ': ' + values['d' + str(n) + '_message_key'])
             r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
         else:
@@ -161,6 +162,7 @@ while True:             # Event Loop
                 log_reg_win = new_log_reg_win()
             else:
                 if (values['c_host_key'] != '') and (values['c_port_key'] != ''):
+                    window['c_output_err'].update('')
                     HOST = values['c_host_key']
                     PORT = values['c_port_key']
                     r = requests.get(f'http://{HOST}:{PORT}')
@@ -177,6 +179,7 @@ while True:             # Event Loop
 
     elif event == 'Submit' and not find_win:
         try:
+            window['l_r_output_err'].update('')
             if values['l_r_radio_log_key'] == True:
                 
                 r = requests.post(f'http://{HOST}:{PORT}/login', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
@@ -210,6 +213,7 @@ while True:             # Event Loop
 
     elif event == 'Find':
         try:
+            window['f_output_err'].update('')
             window['f_output_name'].update('Hi ' + username)
             if win_number != 3:
                 r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
