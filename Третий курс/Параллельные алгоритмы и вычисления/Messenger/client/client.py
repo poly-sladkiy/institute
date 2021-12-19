@@ -65,60 +65,72 @@ def new_dialog3_win():
               [sg.Text(size=(15,1), key='d3_output_err')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
+def new_connection_err_win():
+    layout = [[sg.Text('Connection error!')],
+              [sg.Button('Back to connection')]]
+    return sg.Window('Connection error', layout, finalize=True)
+
+
+startup_win, connection_win,  log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win, connection_err_win = new_startup_win(), None, None, None, None, None, None, None
 
 # --------------------| Functions |-------------------- #
 
 def send(n):
-    if values['d' + str(n) + '_message_key'] != '':
-        print(username + ': ' + values['d' + str(n) + '_message_key'])
-        r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
-    else:
-        window['d' + str(n) + '_output_err'].update('Empty messege')
+    try:
+        if values['d' + str(n) + '_message_key'] != '':
+            print(username + ': ' + values['d' + str(n) + '_message_key'])
+            r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
+        else:
+            window['d' + str(n) + '_output_err'].update('Empty messege')
+    
+    except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+                window.close()
+                connection_err_win = new_connection_err_win()
 
 def check_msg(n):
-    # try:
-    r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+    try:
+        r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+        data = json.loads(r.content.decode('utf-8'))
 
-    # except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
-    #     pass
-
-    data = json.loads(r.content.decode('utf-8'))
-
-    msg_arr = []
-    if data['request'] == 'OK':
-        window['d' + str(n) + '_output'].update('')
-        for msg in data['data']:
-            if msg['from'] == companion_username:
-                msg_arr.append(msg)
-                # print('[' + data['time'] + '] ' + companion_username + ': ' + msg['msg'])
-            if username != companion_username:
-                if (msg['from'] == username) and (msg['to'] == companion_username):
+        msg_arr = []
+        if data['request'] == 'OK':
+            window['d' + str(n) + '_output'].update('')
+            for msg in data['data']:
+                if msg['from'] == companion_username:
                     msg_arr.append(msg)
-                    # print('[' + data['time'] + '] ' + username + ': ' + msg['msg'])
+                if username != companion_username:
+                    if (msg['from'] == username) and (msg['to'] == companion_username):
+                        msg_arr.append(msg)
 
-        for a in sorted(msg_arr, key = lambda x: x['time']):
-            print('[' + a['time'] + '] ' + a['from'] + ': ' + a['msg'])
+            for a in sorted(msg_arr, key = lambda x: x['time']):
+                print('[' + a['time'] + '] ' + a['from'] + ': ' + a['msg'])
 
-        # for i in range(len(msg_arr)-1):
-        #     for j in range(len(msg_arr)-i-1):
-        #         if msg_arr[j]['time'] > msg_arr[j+1]['time']:
-        #             msg_arr[j]['time'], msg_arr[j+1]['time'] = msg_arr[j+1]['time'], msg_arr[j]['time']
-
-    elif data['request'] == 'BAD':
-        window['d' + str(n) + '_output'].update('')
-        print('FATAL ERROR! Nobody wants to write you')
-
-startup_win, connection_win,  log_reg_win, find_win, dialog1_win, dialog2_win, dialog3_win = new_startup_win(), None, None, None, None, None, None
+        elif data['request'] == 'BAD':
+            window['d' + str(n) + '_output'].update('')
+            print('FATAL ERROR! Nobody wants to write you')
+    
+    except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+                window.close()
+                connection_err_win = new_connection_err_win()
 
 while True:             # Event Loop
     window, event, values = sg.read_all_windows()
 
-    if event == sg.WIN_CLOSED or event == 'Exit':
+    if event == sg.WIN_CLOSED or event == 'Back to connection':
         window.close()
         if window == startup_win:
             break
         elif window == startup_win:
             startup_win = None
+        elif window == connection_err_win:
+            window.close()
+            connection_err_win = None
+            dialog1_win = None
+            dialog2_win = None
+            dialog3_win = None
+            find_win = None
+            log_reg_win = None
+            connection_win = new_connection_win()
         elif window == connection_win:
             connection_win = None
         elif window == log_reg_win:
@@ -140,81 +152,89 @@ while True:             # Event Loop
 
 
     elif event == 'Connect' and not log_reg_win:
-        if values['c_cb'] == True:
-            window.close()
-            connection_win = None
-            log_reg_win = new_log_reg_win()
-        else:
-            if (values['c_host_key'] != '') and (values['c_port_key'] != ''):
-                HOST = values['c_host_key']
-                PORT = values['c_port_key']
+        try:
+            if values['c_cb'] == True:
+                HOST = '127.0.0.1'
+                PORT = 8080
                 window.close()
                 connection_win = None
                 log_reg_win = new_log_reg_win()
             else:
-                window['c_output_err'].update('Empty field')
+                if (values['c_host_key'] != '') and (values['c_port_key'] != ''):
+                    HOST = values['c_host_key']
+                    PORT = values['c_port_key']
+                    r = requests.post(f'http://{HOST}:{PORT}')
+                    window.close()
+                    connection_win = None
+                    log_reg_win = new_log_reg_win()
+                else:
+                    window['c_output_err'].update('Empty field')
+        
+        except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+                window.close()
+                connection_err_win = new_connection_err_win()
 
 
     elif event == 'Submit' and not find_win:
-        if values['l_r_radio_log_key'] == True:
-            
-            r = requests.post(f'http://{HOST}:{PORT}/login', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
-            data = json.loads(r.content.decode('utf-8'))
-            
-            if data['request'] == 'OK':
-                # print(values['l_r_login_key'], type(values['l_r_login_key']))
-                username = values['l_r_login_key']
-                window.close()
-                log_reg_win = None
-                find_win = new_find_win()
+        try:
+            if values['l_r_radio_log_key'] == True:
+                
+                r = requests.post(f'http://{HOST}:{PORT}/login', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
+                data = json.loads(r.content.decode('utf-8'))
+                
+                if data['request'] == 'OK':
+                    username = values['l_r_login_key']
+                    window.close()
+                    log_reg_win = None
+                    find_win = new_find_win()
 
-            elif data['request'] == 'BAD':
-                window['l_r_output_err'].update('User not found')
-        else:
-            r = requests.post(f'http://{HOST}:{PORT}/register', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
-            data = json.loads(r.content.decode('utf-8'))
-            
-            if data['request'] == 'OK':
-                username = values['l_r_login_key']
-                window.close()
-                log_reg_win = None
-                find_win = new_find_win()
+                elif data['request'] == 'BAD':
+                    window['l_r_output_err'].update('User not found')
+            else:
+                r = requests.post(f'http://{HOST}:{PORT}/register', data={'User-Agent': 'XMessenger', 'username': values['l_r_login_key'], 'password': values['l_r_password_key']})
+                data = json.loads(r.content.decode('utf-8'))
+                
+                if data['request'] == 'OK':
+                    username = values['l_r_login_key']
+                    window.close()
+                    log_reg_win = None
+                    find_win = new_find_win()
 
-            elif data['request'] == 'BAD':
-                window['l_r_output_err'].update('Something wrong')
+                elif data['request'] == 'BAD':
+                    window['l_r_output_err'].update('Something wrong')
+
+        except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+                window.close()
+                connection_err_win = new_connection_err_win()
         
 
     elif event == 'Find':
-        window['f_output_name'].update('Hi ' + username)
-        if win_number != 3:
-            r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
-            data = json.loads(r.content.decode('utf-8'))
-            
-            if data['request'] == 'OK':
-                    companion_username = values['f_username_key']
-                    if not dialog1_win:
-                        win_number += 1
-                        dialog1_win = new_dialog1_win()
-                    elif not dialog2_win:
-                        win_number += 1
-                        dialog2_win = new_dialog2_win()
-                    elif not dialog3_win:
-                        win_number += 1
-                        dialog2_win = new_dialog3_win()
+        try:
+            window['f_output_name'].update('Hi ' + username)
+            if win_number != 3:
+                r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
+                data = json.loads(r.content.decode('utf-8'))
+                
+                if data['request'] == 'OK':
+                        companion_username = values['f_username_key']
+                        if not dialog1_win:
+                            win_number += 1
+                            dialog1_win = new_dialog1_win()
+                        elif not dialog2_win:
+                            win_number += 1
+                            dialog2_win = new_dialog2_win()
+                        elif not dialog3_win:
+                            win_number += 1
+                            dialog2_win = new_dialog3_win()
 
-            elif data['request'] == 'BAD':
-                window['f_output_err'].update('User not found')
+                elif data['request'] == 'BAD':
+                    window['f_output_err'].update('User not found')
+
+        except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+                window.close()
+                connection_err_win = new_connection_err_win()
         
-    
-    # elif event == 'Send':
-    #     if dialog1_win:
-    #         send(1)
 
-    #     elif dialog2_win:
-    #         send(2)
-
-    #     elif dialog3_win:
-    #         send(3)
     elif event == 'Send 1':
         window['d1_output_name'].update(companion_username)
         send(1)
@@ -230,17 +250,6 @@ while True:             # Event Loop
     elif event == 'Check messages 2':
         check_msg(2)
     elif event == 'Check messages 3':
-        check_msg(3)
-
-    # elif event == 'Check messages':
-    #     if dialog1_win:
-    #         check_msg(1)
-
-    #     elif dialog2_win:
-    #         check_msg(2)
-
-    #     elif dialog3_win:
-    #         check_msg(3)
-        
+        check_msg(3)       
 
 window.close()
