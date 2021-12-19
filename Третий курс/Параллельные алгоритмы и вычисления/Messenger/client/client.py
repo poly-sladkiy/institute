@@ -18,46 +18,50 @@ def new_startup_win():
     return sg.Window('Autorization', layout, finalize=True)
 
 def new_connection_win():
-    layout = [[sg.Text('Host:'), sg.InputText(key = 'c_host_key')],
-              [sg.Text('Port:'), sg.InputText(key = 'c_port_key')],
+    layout = [[sg.Text('Host:', size=(7,1)), sg.InputText(key = 'c_host_key')],
+              [sg.Text('Port:', size=(7,1)), sg.InputText(key = 'c_port_key')],
               [sg.Checkbox('Default', key = 'c_cb')],
               [sg.Button('Connect')],
-              [sg.Text(size=(15,1), key='c_output_err')]]
+              [sg.Text(size=(15,1), key='c_output_err', text_color = 'red')]]
     return sg.Window('Connection', layout, finalize=True) 
 
 def new_log_reg_win():
-    layout = [[sg.Text('Login:'), sg.InputText(key = 'l_r_login_key')],
-              [sg.Text('Password:'), sg.InputText(key = 'l_r_password_key', password_char = '*')],
+    layout = [[sg.Text('Login:', size=(10,1)), sg.InputText(key = 'l_r_login_key')],
+              [sg.Text('Password:', size=(10,1)), sg.InputText(key = 'l_r_password_key', password_char = '*')],
               [sg.Radio('Log in', '1', default = True, key = 'l_r_radio_log_key'), sg.Radio('Sign in', '1', default = False)],
               [sg.Button('Submit')],
-              [sg.Text(size=(15,1), key='l_r_output_err')]]
+              [sg.Text(size=(15,1), key='l_r_output_err', text_color = 'red')]]
     return sg.Window('Log/Reg', layout, finalize=True) 
 
 def new_find_win():
-    layout = [[sg.Text('Find User')],
+    layout = [[sg.Text(size=(15,1), key='f_output_name', justification = 'center')],
+              [sg.Text('Find User')],
               [sg.InputText('', key = 'f_username_key')],
               [sg.Button('Find')],
-              [sg.Text(size=(15,1), key='f_output_err')]]
+              [sg.Text(size=(15,1), key='f_output_err', text_color = 'red')]]
     return sg.Window('Find User', layout, finalize=True) 
 
 def new_dialog1_win():
-    layout = [[sg.Output(size=(88, 20), key = 'd1_output')],
+    layout = [[sg.Text(size=(15,1), key='d1_output_name', justification = 'center')],
+              [sg.Output(size=(88, 20), key = 'd1_output')],
               [sg.InputText('Enter message', key = 'd1_message_key', do_not_clear = False)],
               [sg.Button('Send 1'), sg.Button('Check messages 1')],
-              [sg.Text(size=(15,1), key='d1_output_err')]]
+              [sg.Text(size=(15,1), key='d1_output_err', text_color = 'red')]]
     return sg.Window('Dialog 1', layout, finalize=True)
 
 def new_dialog2_win():
-    layout = [[sg.Output(size=(88, 20), key = 'd2_output')],
+    layout = [[sg.Text(size=(15,1), key='d2_output_name', justification = 'center')],
+              [sg.Output(size=(88, 20), key = 'd2_output')],
               [sg.InputText('Enter message', key = 'd2_message_key', do_not_clear = False)],
               [sg.Button('Send 2'), sg.Button('Check messages 2')],
-              [sg.Text(size=(15,1), key='d2_output_err')]]
+              [sg.Text(size=(15,1), key='d2_output_err', text_color = 'red')]]
     return sg.Window('Dialog 2', layout, finalize=True)
 
 def new_dialog3_win():
-    layout = [[sg.Output(size=(88, 20), key = 'd3_output')],
+    layout = [[sg.Text(size=(15,1), key='d3_output_name', justification = 'center')],
+              [sg.Output(size=(88, 20), key = 'd3_output')],
               [sg.InputText('Enter message', key = 'd3_message_key', do_not_clear = False)],
-              [sg.Button('Send 3'), sg.Button('Check messages 3')],
+              [sg.Button('Send 3'), sg.Button('Check messages 3', text_color = 'red')],
               [sg.Text(size=(15,1), key='d3_output_err')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
@@ -72,7 +76,12 @@ def send(n):
         window['d' + str(n) + '_output_err'].update('Empty messege')
 
 def check_msg(n):
+    # try:
     r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
+
+    # except (requests.exceptions.InvalidURL, requests.exceptions.ConnectionError) as er:
+    #     pass
+
     data = json.loads(r.content.decode('utf-8'))
 
     msg_arr = []
@@ -153,6 +162,7 @@ while True:             # Event Loop
             data = json.loads(r.content.decode('utf-8'))
             
             if data['request'] == 'OK':
+                # print(values['l_r_login_key'], type(values['l_r_login_key']))
                 username = values['l_r_login_key']
                 window.close()
                 log_reg_win = None
@@ -175,6 +185,7 @@ while True:             # Event Loop
         
 
     elif event == 'Find':
+        window['f_output_name'].update('Hi ' + username)
         if win_number != 3:
             r = requests.post(f'http://{HOST}:{PORT}/find_user', data={'User-Agent': 'XMessenger', 'username': values['f_username_key']})
             data = json.loads(r.content.decode('utf-8'))
@@ -205,10 +216,13 @@ while True:             # Event Loop
     #     elif dialog3_win:
     #         send(3)
     elif event == 'Send 1':
+        window['d1_output_name'].update(companion_username)
         send(1)
     elif event == 'Send 2':
+        window['d2_output_name'].update(companion_username)
         send(2)
     elif event == 'Send 3':
+        window['d3_output_name'].update(companion_username)
         send(3)
 
     elif event == 'Check messages 1':
