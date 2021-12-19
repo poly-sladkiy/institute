@@ -43,27 +43,33 @@ def new_find_win():
 def new_dialog1_win():
     layout = [[sg.Output(size=(88, 20), key = 'd1_output')],
               [sg.InputText('Enter message', key = 'd1_message_key', do_not_clear = False)],
-              [sg.Button('Send 1'), sg.Button('Check messages 1')]]
+              [sg.Button('Send 1'), sg.Button('Check messages 1')],
+              [sg.Text(size=(15,1), key='d1_output_err')]]
     return sg.Window('Dialog 1', layout, finalize=True)
 
 def new_dialog2_win():
     layout = [[sg.Output(size=(88, 20), key = 'd2_output')],
               [sg.InputText('Enter message', key = 'd2_message_key', do_not_clear = False)],
-              [sg.Button('Send 2'), sg.Button('Check messages 2')]]
+              [sg.Button('Send 2'), sg.Button('Check messages 2')],
+              [sg.Text(size=(15,1), key='d2_output_err')]]
     return sg.Window('Dialog 2', layout, finalize=True)
 
 def new_dialog3_win():
     layout = [[sg.Output(size=(88, 20), key = 'd3_output')],
               [sg.InputText('Enter message', key = 'd3_message_key', do_not_clear = False)],
-              [sg.Button('Send 3'), sg.Button('Check messages 3')]]
+              [sg.Button('Send 3'), sg.Button('Check messages 3')],
+              [sg.Text(size=(15,1), key='d3_output_err')]]
     return sg.Window('Dialog 3', layout, finalize=True)
 
 
 # --------------------| Functions |-------------------- #
 
 def send(n):
-    print(username + ': ' + values['d' + str(n) + '_message_key'])
-    r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
+    if values['d' + str(n) + '_message_key'] != '':
+        print(username + ': ' + values['d' + str(n) + '_message_key'])
+        r = requests.post(f'http://{HOST}:{PORT}/send_to', data={'User-Agent': 'XMessenger', 'from': username, 'to': companion_username, 'msg': values['d' + str(n) + '_message_key']})
+    else:
+        window['d' + str(n) + '_output_err'].update('Empty messege')
 
 def check_msg(n):
     r = requests.get(f'http://{HOST}:{PORT}/check_messages', params={'User-Agent': 'XMessenger', 'username': username})
@@ -76,9 +82,10 @@ def check_msg(n):
             if msg['from'] == companion_username:
                 msg_arr.append(msg)
                 # print('[' + data['time'] + '] ' + companion_username + ': ' + msg['msg'])
-            if (msg['from'] == username) and (msg['to'] == companion_username):
-                msg_arr.append(msg)
-                # print('[' + data['time'] + '] ' + username + ': ' + msg['msg'])
+            if username != companion_username:
+                if (msg['from'] == username) and (msg['to'] == companion_username):
+                    msg_arr.append(msg)
+                    # print('[' + data['time'] + '] ' + username + ': ' + msg['msg'])
 
         for a in sorted(msg_arr, key = lambda x: x['time']):
             print('[' + a['time'] + '] ' + a['from'] + ': ' + a['msg'])
