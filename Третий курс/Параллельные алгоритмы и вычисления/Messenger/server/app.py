@@ -111,7 +111,7 @@ def login():
         )
 
     except:
-        print(f'[Error]: /login - {username}')
+        print(f'[Error]: /login')
 
         return jsonify(
             request='BAD',
