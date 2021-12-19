@@ -33,9 +33,11 @@ def register():
             case 'POST':
 
                 try:
+                    password = conf_password(request.form.get('password'))
+
                     User(
                         username=request.form.get('username'),
-                        password=conf_password(request.form.get('password'))
+                        password=password
                     ).save()
 
                 except (sqlite3.IntegrityError, peewee.IntegrityError) as er:
@@ -45,13 +47,31 @@ def register():
                         info=str(er),
                     )
 
+                except:
+                    print(f'[Error]: /register - {request.form} - {password}')
+
+                    return jsonify(
+                        request='BAD',
+                        error=f'Unknown error',
+                        info='',
+                    )
+
                 return jsonify(
                     request='OK',
                     error='',
                 )
 
-    except ... as er:
-        print(f'[Error]:')
+    except Exception as er:
+        print(f'[Error]: /register - {er}')
+
+        return jsonify(
+            request='BAD',
+            error=str(er),
+            username=''
+        )
+
+    except:
+        print(f'[Error]: /register')
 
         return jsonify(
             request='BAD',
@@ -65,11 +85,9 @@ def login():
     try:
         # check_user_agent(request)
 
-        username, password = request.form.get('username'), request.form.get('password')
-
         if User.select() \
-                .where(User.username == username) \
-                .where(User.password == conf_password(password)) \
+                .where(User.username == request.form.get('username')) \
+                .where(User.password == conf_password(request.form.get('password'))) \
                 .count() > 0:
 
             return jsonify(
@@ -83,8 +101,17 @@ def login():
                 error='Incorrect login or password'
             )
 
-    except ... as er:
-        print(f'[Error]:')
+    except Exception as er:
+        print(f'[Error]: /login - {er}')
+
+        return jsonify(
+            request='BAD',
+            error=str(er),
+            username=''
+        )
+
+    except:
+        print(f'[Error]: /login - {username}')
 
         return jsonify(
             request='BAD',
@@ -108,8 +135,17 @@ def find():
                 username=data.username
             )
 
-    except ... as er:
-        print(f'[Error]:')
+    except Exception as er:
+        print(f'[Error]: /find_user - {er}')
+
+        return jsonify(
+            request='BAD',
+            error=str(er),
+            username=''
+        )
+
+    except:
+        print(f'[Error]: /find_user - {name}')
 
         return jsonify(
             request='BAD',
@@ -157,13 +193,22 @@ def check():
             data=data,
         )
 
-    except ... as er:
-        print(f'[Error]:')
+    except Exception as er:
+        print(f'[Error]: /check_messages - {er}')
 
         return jsonify(
-            request="BAD",
-            error="",
-            username=""
+            request='BAD',
+            error=str(er),
+            username=''
+        )
+
+    except:
+        print(f'[Error]: /check_messages')
+
+        return jsonify(
+            request='BAD',
+            error='',
+            username=''
         )
 
 
@@ -185,8 +230,17 @@ def send():
             to_user=request.form.get('to'),
         )
 
-    except ... as er:
-        print(f'[Error]:')
+    except Exception as er:
+        print(f'[Error]: /send_to - {er}')
+
+        return jsonify(
+            request='BAD',
+            error=str(er),
+            username=''
+        )
+
+    except:
+        print(f'[Error]: /send_to')
 
         return jsonify(
             request='BAD',

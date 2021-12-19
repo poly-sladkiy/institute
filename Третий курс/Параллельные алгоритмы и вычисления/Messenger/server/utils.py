@@ -1,5 +1,8 @@
+from hashlib import sha256
+
 def conf_password(s: str):
-    return hex(abs(hash(s)))
+    res = sha256(s.encode()).hexdigest()
+    return res
 
 
 def check_user_agent(r):
