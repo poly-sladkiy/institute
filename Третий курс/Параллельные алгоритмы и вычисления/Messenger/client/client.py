@@ -163,7 +163,7 @@ while True:             # Event Loop
                 if (values['c_host_key'] != '') and (values['c_port_key'] != ''):
                     HOST = values['c_host_key']
                     PORT = values['c_port_key']
-                    r = requests.post(f'http://{HOST}:{PORT}')
+                    r = requests.get(f'http://{HOST}:{PORT}')
                     window.close()
                     connection_win = None
                     log_reg_win = new_log_reg_win()
