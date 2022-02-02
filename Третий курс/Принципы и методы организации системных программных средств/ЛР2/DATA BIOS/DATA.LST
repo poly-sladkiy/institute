@@ -1,0 +1,61 @@
+Turbo Assembler	 Version 3.1	    30/11/21 16:35:44	    Page 1
+data.asm
+
+
+
+      1	0000			     c1	segment
+      2					     assume cs:c1, ds:c1, es:c1, ss:c1
+      3					     org 100h
+      4
+      5	0100			     start:
+      6	0100  B8 0003			     mov ax, 3
+      7	0103  CD 10			     int 10h
+      8
+      9	0105  B8 FFFF			     mov ax, 0FFFFh
+     10	0108  8E D8			     mov ds, ax
+     11
+     12	010A  B8 B800			     mov ax, 0B800h
+     13	010D  8E C0			     mov es, ax
+     14
+     15	010F  BE 0005			     mov si, 5
+     16	0112  BF 069A			     mov di, 1690
+     17	0115  B9 0008			     mov cx, 8
+     18	0118  B4 C2			     mov ah, 0C2h
+     19
+     20	011A			     m2:
+     21	011A  8A 04			     mov al, [si]
+     22	011C  26: 89 05			     mov es:[di], ax
+     23
+     24	011F  83 C7 02			     add di, 2
+     25	0122  46			     inc si
+     26
+     27	0123  E2 F5			     loop m2
+     28
+     29	0125  B8 4C00			     mov ax, 4C00h
+     30	0128  CD 21			     int 21h
+     31
+     32	012A			     c1	ends
+     33				     end start
+Turbo Assembler	 Version 3.1	    30/11/21 16:35:44	    Page 2
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "30/11/21"
+??FILENAME			  Text	 "data	  "
+??TIME				  Text	 "16:35:44"
+??VERSION			  Number 030A
+@CPU				  Text	 0101H
+@CURSEG				  Text	 C1
+@FILENAME			  Text	 DATA
+@WORDSIZE			  Text	 2
+M2				  Near	 C1:011A
+START				  Near	 C1:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+C1				  16  012A Para	  none
+

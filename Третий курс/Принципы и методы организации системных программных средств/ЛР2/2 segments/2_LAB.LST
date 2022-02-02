@@ -1,0 +1,118 @@
+Turbo Assembler	 Version 3.1	    30/11/21 15:56:14	    Page 1
+2_lab.asm
+
+
+
+      1	0000			     d1	segment
+      2	0000  0A 0D 45 6E 74 65	72+	     mess_enter_data db	10, 13,	'Enter array: ', 10, 13, '$'
+      3	      20 61 72 72 61 79	3A+
+      4	      20 0A 0D 24
+      5	0012  64*(????)			     arr_data dw 100 dup(?)
+      6	00DA  64*(0024)			     arr_res  dw 100 dup('$')
+      7	01A2  0A 0D 52 65 73 75	6C+	     mess_out_res db 10, 13, 'Result: ', 10, 13, '$'
+      8	      74 3A 20 0A 0D 24
+      9	01AF			     d1	ends
+     10
+     11	0000			     c1	segment
+     12					     assume cs:c1, ds:d1
+     13
+     14	0000			     start:
+     15	0000  B8 0000s			     mov ax, d1
+     16	0003  8E D8			     mov ds, ax
+     17	0005  BA 0000r			     mov dx, offset mess_enter_data
+     18	0008  B4 09			     mov ah, 9	     ; output data
+     19	000A  CD 21			     int 21h
+     20
+     21	000C  BA 0012r			     mov dx, offset arr_data
+     22	000F  C7 06 0012r 00C6		     mov arr_data, 198	     ; 2 bytes for max bytes and how much enter
+     23	0015  B4 0A			     mov ah, 10		     ; read data
+     24	0017  CD 21			     int 21h
+     25
+     26	0019  BE 0014r			     mov si, offset arr_data + 2
+     27	001C  BF 00DAr			     mov di, offset arr_res
+     28
+     29					     ;	     mov ax, cs
+     30					     ;	     add ax, 100
+     31					     ;	     mov ds, ax
+     32					     ;	     mov si, ax
+     33					     ;	     add ax, 100
+     34					     ;	     mov es, ax
+     35					     ;	     mov di, ax
+     36
+     37	001F  8B 0E 0013r		     mov cx, [arr_data + 1]
+     38	0023  32 ED			     xor ch, ch
+     39	0025  D1 E9			     shr cx, 1	     ; >> 2
+     40
+     41	0027			     m1:
+     42	0027  8B 04			     mov ax, [si] ; Change
+     43
+     44	0029  3D 3231			     cmp ax, 3231h   ; 12 in word
+     45	002C  74 0F			     je	m2
+     46
+     47	002E  3D 3332			     cmp ax, 3332h   ; 23 in word
+     48	0031  74 0A			     je	m2
+     49
+     50	0033  3D 3433			     cmp ax, 3433h   ; 34 in word
+     51	0036  74 05			     je	m2
+     52
+     53	0038  89 05			     mov [di], ax
+     54
+     55	003A  83 C7 02			     add di, 2
+     56
+     57	003D			     m2:
+Turbo Assembler	 Version 3.1	    30/11/21 15:56:14	    Page 2
+2_lab.asm
+
+
+
+     58	003D  83 C6 02			     add si, 2
+     59
+     60	0040  E2 E5			     loop m1
+     61
+     62	0042			     m3:     ; output result
+     63	0042  BA 01A2r			     mov dx, offset mess_out_res
+     64	0045  B4 09			     mov ah, 9
+     65	0047  CD 21			     int 21h
+     66
+     67	0049  BA 00DAr			     mov dx, offset arr_res
+     68	004C  B4 09			     mov ah, 9
+     69	004E  CD 21			     int 21h
+     70
+     71	0050  B4 07			     mov ah, 7
+     72	0052  CD 21			     int 21h
+     73
+     74	0054  B8 4C00			     mov ax, 4c00h
+     75	0057  CD 21			     int 21h
+     76
+     77	0059			     c1	ends
+     78				     end start
+Turbo Assembler	 Version 3.1	    30/11/21 15:56:14	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "30/11/21"
+??FILENAME			  Text	 "2_lab	  "
+??TIME				  Text	 "15:56:14"
+??VERSION			  Number 030A
+@CPU				  Text	 0101H
+@CURSEG				  Text	 C1
+@FILENAME			  Text	 2_LAB
+@WORDSIZE			  Text	 2
+ARR_DATA			  Word	 D1:0012
+ARR_RES				  Word	 D1:00DA
+M1				  Near	 C1:0027
+M2				  Near	 C1:003D
+M3				  Near	 C1:0042
+MESS_ENTER_DATA			  Byte	 D1:0000
+MESS_OUT_RES			  Byte	 D1:01A2
+START				  Near	 C1:0000
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+C1				  16  0059 Para	  none
+D1				  16  01AF Para	  none
+

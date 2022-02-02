@@ -1,0 +1,109 @@
+Turbo Assembler	 Version 3.1	    30/11/21 16:24:16	    Page 1
+2_lab.asm
+
+
+
+      1	0000			     c1	segment
+      2					     assume cs:c1, ds:c1, es:c1, ss:c1
+      3					     org 100h	     ; forever in one segment programs
+      4
+      5	0100			     start:
+      6
+      7	0100  B4 09			     mov ah, 9
+      8	0102  BA 0156r			     mov dx, offset mess_enter_data
+      9	0105  B4 09			     mov ah, 9	     ; output data
+     10	0107  CD 21			     int 21h
+     11
+     12	0109  BA 0168r			     mov dx, offset arr_data
+     13	010C  C7 06 0168r 00C6		     mov arr_data, 198	     ; 2 bytes for max bytes and how much enter
+     14
+     15	0112  B4 0A			     mov ah, 10		     ; read data
+     16	0114  CD 21			     int 21h
+     17
+     18	0116  BE 016Ar			     mov si, offset arr_data + 2
+     19	0119  BF 0230r			     mov di, offset arr_res
+     20
+     21	011C  8B 0E 0169r		     mov cx, [arr_data + 1]
+     22	0120  32 ED			     xor ch, ch
+     23	0122  D1 E9			     shr cx, 1	     ; >> 2
+     24
+     25	0124			     m1:
+     26	0124  8B 04			     mov ax, [si]
+     27
+     28	0126  3D 3231			     cmp ax, 3231h   ; 12 in word
+     29	0129  74 0F			     je	m2
+     30
+     31	012B  3D 3332			     cmp ax, 3332h   ; 23 in word
+     32	012E  74 0A			     je	m2
+     33
+     34	0130  3D 3433			     cmp ax, 3433h   ; 34 in word
+     35	0133  74 05			     je	m2
+     36
+     37	0135  89 05			     mov [di], ax
+     38
+     39	0137  83 C7 02			     add di, 2
+     40
+     41	013A			     m2:
+     42	013A  83 C6 02			     add si, 2
+     43
+     44	013D  E2 E5			     loop m1
+     45
+     46	013F			     m3:     ; output result
+     47	013F  BA 02F8r			     mov dx, offset mess_out_res
+     48	0142  B4 09			     mov ah, 9
+     49	0144  CD 21			     int 21h
+     50
+     51	0146  BA 0230r			     mov dx, offset arr_res
+     52	0149  B4 09			     mov ah, 9
+     53	014B  CD 21			     int 21h
+     54
+     55	014D  B4 07			     mov ah, 7
+     56	014F  CD 21			     int 21h
+     57
+Turbo Assembler	 Version 3.1	    30/11/21 16:24:16	    Page 2
+2_lab.asm
+
+
+
+     58	0151  B8 4C00			     mov ax, 4c00h
+     59	0154  CD 21			     int 21h
+     60
+     61	0156  0A 0D 45 6E 74 65	72+	     mess_enter_data db	10, 13,	'Enter array: ', 10, 13, '$'
+     62	      20 61 72 72 61 79	3A+
+     63	      20 0A 0D 24
+     64	0168  64*(????)			     arr_data dw 100 dup(?)
+     65	0230  64*(0024)			     arr_res  dw 100 dup('$')
+     66	02F8  0A 0D 52 65 73 75	6C+	     mess_out_res db 10, 13, 'Result: ', 10, 13, '$'
+     67	      74 3A 20 0A 0D 24
+     68
+     69	0305			     c1	ends
+     70				     end start
+Turbo Assembler	 Version 3.1	    30/11/21 16:24:16	    Page 3
+Symbol Table
+
+
+
+
+Symbol Name			  Type	 Value
+
+??DATE				  Text	 "30/11/21"
+??FILENAME			  Text	 "2_lab	  "
+??TIME				  Text	 "16:24:16"
+??VERSION			  Number 030A
+@CPU				  Text	 0101H
+@CURSEG				  Text	 C1
+@FILENAME			  Text	 2_LAB
+@WORDSIZE			  Text	 2
+ARR_DATA			  Word	 C1:0168
+ARR_RES				  Word	 C1:0230
+M1				  Near	 C1:0124
+M2				  Near	 C1:013A
+M3				  Near	 C1:013F
+MESS_ENTER_DATA			  Byte	 C1:0156
+MESS_OUT_RES			  Byte	 C1:02F8
+START				  Near	 C1:0100
+
+Groups & Segments		  Bit Size Align  Combine Class
+
+C1				  16  0305 Para	  none
+
