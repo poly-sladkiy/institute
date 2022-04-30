@@ -3,6 +3,7 @@
 
 # MS Office
 *.tmp
+~$*.*
 
 # Execution files
 *.out
