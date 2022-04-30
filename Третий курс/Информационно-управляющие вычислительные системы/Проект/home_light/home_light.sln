@@ -1,0 +1,25 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio Version 17
+VisualStudioVersion = 17.1.32407.343
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "home_light", "home_light\home_light.csproj", "{E3CCC574-F1B4-4B7C-9B33-279D6E04A786}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|Any CPU = Debug|Any CPU
+		Release|Any CPU = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{E3CCC574-F1B4-4B7C-9B33-279D6E04A786}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
+		{E3CCC574-F1B4-4B7C-9B33-279D6E04A786}.Debug|Any CPU.Build.0 = Debug|Any CPU
+		{E3CCC574-F1B4-4B7C-9B33-279D6E04A786}.Release|Any CPU.ActiveCfg = Release|Any CPU
+		{E3CCC574-F1B4-4B7C-9B33-279D6E04A786}.Release|Any CPU.Build.0 = Release|Any CPU
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {D04DC976-CA63-4825-900A-9DF0B991BBDF}
+	EndGlobalSection
+EndGlobal
