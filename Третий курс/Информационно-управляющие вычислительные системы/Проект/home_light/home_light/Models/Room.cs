@@ -13,6 +13,11 @@ namespace home_light.Models
         /// </summary>
         public string? Name { get; set; }
         /// <summary>
+        /// Sensors in the room
+        /// </summary>
+        public List<Sensor>? Sensors { get; set; }
+        #region ibase
+        /// <summary>
         /// Date add
         /// </summary>
         public DateTime DateAdd { get; set; } = DateTime.Now;
@@ -24,9 +29,6 @@ namespace home_light.Models
         /// Is deleted
         /// </summary>
         public bool IsDeleted { get; set; } = false;
-        /// <summary>
-        /// Sensors in the room
-        /// </summary>
-        public List<Sensor>? Sensors { get; set; }
+        #endregion
     }
 }
