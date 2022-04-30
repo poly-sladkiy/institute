@@ -2,10 +2,7 @@
 .DS_Store
 
 # MS Office
-*.docx
-*.doc
-*.xls
-*.xlsx
+*.tmp
 
 # Execution files
 *.out
@@ -30,5 +27,3 @@ cmake-build-debug/
 *.tar*
 
 # User's files
-Практика
-
