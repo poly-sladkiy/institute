@@ -1,5 +1,8 @@
 ﻿namespace home_light.Interfaces
 {
+    /// <summary>
+    /// Base interfaces
+    /// </summary>
     public interface IBase
     {
         /// <summary>
