@@ -50,7 +50,8 @@ builder.Services.AddDbContext<ApplicationContext>(options =>
 
 // Repositories
 builder.Services
-                .AddScoped<RoomRepository>();
+                .AddScoped<RoomRepository>()
+                .AddScoped<SensorRepository>();
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
