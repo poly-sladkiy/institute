@@ -1,5 +1,6 @@
 using home_light;
 using home_light.Extensions;
+using home_light.Repositories;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
@@ -47,12 +48,18 @@ var connectionString = builder.Configuration.GetConnectionString("DefaultConnect
 builder.Services.AddDbContext<ApplicationContext>(options =>
                 options.UseNpgsql(connectionString, o => o.SetPostgresVersion(12, 13))/*, ServiceLifetime.Transient*/);
 
+// Repositories
+builder.Services
+                .AddScoped<RoomRepository>();
+
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
 builder.Services.AddSwaggerGen();
 #endregion
 var app = builder.Build();
 #region app
+AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();
