@@ -1,5 +1,5 @@
 ﻿using home_light.Interfaces;
-using System.ComponentModel.DataAnnotations;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace home_light.Models
@@ -16,12 +16,15 @@ namespace home_light.Models
         /// <summary>
         /// Flash name
         /// </summary>
-        [Required]
         public string? Name { get; set; }
+        /// <summary>
+        /// Sensor Id
+        /// </summary>
+        public int SensorId { get; set; }
         /// <summary>
         /// Sensor
         /// </summary>
-        [Required]
+        [ForeignKey("SensorId")]
         public virtual Sensor? Sensor { get; set; }
         #region ibase
         /// <summary>
