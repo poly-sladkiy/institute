@@ -34,7 +34,7 @@ namespace home_light.Controllers
         /// <summary>
         /// Get room by id
         /// </summary>
-        /// <param name="Id"></param>
+        /// <param name="id"></param>
         /// <returns></returns>
         [HttpGet]
         [Route("{id}")]
