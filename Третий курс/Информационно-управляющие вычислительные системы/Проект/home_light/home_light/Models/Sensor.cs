@@ -17,7 +17,6 @@ namespace home_light.Models
         /// <summary>
         /// Name of sensor
         /// </summary>
-        [Required]
         public string? Name { get; set; }
         /// <summary>
         /// Data

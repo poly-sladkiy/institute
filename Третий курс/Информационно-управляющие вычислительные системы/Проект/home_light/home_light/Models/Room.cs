@@ -16,7 +16,6 @@ namespace home_light.Models
         /// <summary>
         /// Name of  the room
         /// </summary>
-        [Required]
         public string? Name { get; set; }
         /// <summary>
         /// Sensors in the room
