@@ -1,4 +1,6 @@
+using home_light;
 using home_light.Extensions;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.OpenApi.Models;
 using System.Reflection;
 
@@ -40,6 +42,10 @@ builder.Services.AddSwaggerGen(c =>
     var xmlPath = System.IO.Path.Combine(AppContext.BaseDirectory, xmlFile);
     c.IncludeXmlComments(xmlPath);
 });
+builder.Services.AddHttpContextAccessor();
+var connectionString = builder.Configuration.GetConnectionString("DefaultConnection");
+builder.Services.AddDbContext<ApplicationContext>(options =>
+                options.UseNpgsql(connectionString, o => o.SetPostgresVersion(12, 13))/*, ServiceLifetime.Transient*/);
 
 // Learn more about configuring Swagger/OpenAPI at https://aka.ms/aspnetcore/swashbuckle
 builder.Services.AddEndpointsApiExplorer();
