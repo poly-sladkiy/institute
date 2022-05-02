@@ -26,16 +26,20 @@ namespace home_light.Models
         /// <summary>
         /// Date add
         /// </summary>
+        [JsonIgnore]
         public DateTime DateAdd { get; set; } = DateTime.Now;
         /// <summary>
         /// Date update
         /// </summary>
+        [JsonIgnore]
         public DateTime DateUpdate { get; set; } = DateTime.Now;
         /// <summary>
         /// Is deleted
         /// </summary>
+        [JsonIgnore]
         public bool IsDeleted { get; set; } = false;
         #endregion
+
 
     }
 }

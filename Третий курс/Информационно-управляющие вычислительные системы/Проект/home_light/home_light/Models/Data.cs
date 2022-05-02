@@ -37,5 +37,6 @@ namespace home_light.Models
         [JsonIgnore]
         public bool IsDeleted { get; set; } = false;
         #endregion
+
     }
 }
