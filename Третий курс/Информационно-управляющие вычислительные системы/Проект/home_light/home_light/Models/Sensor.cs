@@ -29,7 +29,7 @@ namespace home_light.Models
         /// <summary>
         /// Room Id
         /// </summary>
-        public int RoomId { get; set; }
+        public int? RoomId { get; set; }
         /// <summary>
         /// Room
         /// </summary>

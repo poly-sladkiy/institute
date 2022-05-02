@@ -1,4 +1,5 @@
 ﻿using home_light.Interfaces;
+using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace home_light.Models
@@ -17,8 +18,13 @@ namespace home_light.Models
         /// </summary>
         public bool IsWork { get; set; } = false;
         /// <summary>
+        /// SensorId
+        /// </summary>
+        public int? SensorId { get; set; }
+        /// <summary>
         /// Sensor
         /// </summary>
+        [ForeignKey("SensorId")]
         public virtual Sensor? Sensor { get; set; }
         #region ibase
         /// <summary>
