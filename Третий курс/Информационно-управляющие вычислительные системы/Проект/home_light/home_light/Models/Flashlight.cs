@@ -1,5 +1,6 @@
 ﻿using home_light.Interfaces;
 using System.ComponentModel.DataAnnotations;
+using System.Text.Json.Serialization;
 
 namespace home_light.Models
 {
