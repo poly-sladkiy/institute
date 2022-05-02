@@ -1,7 +1,11 @@
 ﻿using home_light.Interfaces;
+using System.ComponentModel.DataAnnotations;
 
 namespace home_light.Models
 {
+    /// <summary>
+    /// House room
+    /// </summary>
     public class Room : IBase
     {
         /// <summary>
@@ -11,11 +15,12 @@ namespace home_light.Models
         /// <summary>
         /// Name of  the room
         /// </summary>
+        [Required]
         public string? Name { get; set; }
         /// <summary>
         /// Sensors in the room
         /// </summary>
-        public List<Sensor>? Sensors { get; set; }
+        public virtual List<Sensor>? Sensors { get; set; }
         #region ibase
         /// <summary>
         /// Date add

@@ -1,41 +1,25 @@
 ﻿using home_light.Interfaces;
-using System.ComponentModel.DataAnnotations;
-using System.ComponentModel.DataAnnotations.Schema;
 using System.Text.Json.Serialization;
 
 namespace home_light.Models
 {
     /// <summary>
-    /// Sensors in room
+    /// Data from sensor
     /// </summary>
-    public class Sensor : IBase
+    public class Data : IBase
     {
         /// <summary>
         /// Id
         /// </summary>
         public int Id { get; set; }
         /// <summary>
-        /// Name of sensor
+        /// Sensor on/off
         /// </summary>
-        [Required]
-        public string? Name { get; set; }
+        public bool IsWork { get; set; } = false;
         /// <summary>
-        /// Data
+        /// Sensor
         /// </summary>
-        public virtual List<Data>? Data { get; set; }
-        /// <summary>
-        /// Flashlights
-        /// </summary>
-        public virtual List<Flashlight>? Flashlights { get; set; }
-        /// <summary>
-        /// Room Id
-        /// </summary>
-        public int RoomId { get; set; }
-        /// <summary>
-        /// Room
-        /// </summary>
-        [ForeignKey("RoomId")]
-        public virtual Room? Room { get; set; }
+        public virtual Sensor? Sensor { get; set; }
         #region ibase
         /// <summary>
         /// Date add
