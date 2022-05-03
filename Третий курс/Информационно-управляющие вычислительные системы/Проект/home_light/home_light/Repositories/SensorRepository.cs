@@ -29,14 +29,14 @@ namespace home_light.Repositories
             if (db.Sensors == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var rooms = db.Sensors.ToList();
+            var sensor = db.Sensors.ToList();
 
-            foreach (var item in rooms)
-            {
-                item.Flashlights ??= new List<Flashlight>();
-            }
+            //foreach (var item in rooms)
+            //{
+            //    item.Flashlights ??= new List<Flashlight>();
+            //}
 
-            return rooms;
+            return sensor;
         }
         /// <summary>
         /// Get by Id
@@ -51,11 +51,11 @@ namespace home_light.Repositories
             if (db.Sensors == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var room = db.Sensors.FirstOrDefault(r => r.Id == id);
-            if (room != null)
-                room.Flashlights ??= new List<Flashlight>();
+            var sensor = db.Sensors.FirstOrDefault(r => r.Id == id);
+            //if (room != null)
+            //    room.Flashlights ??= new List<Flashlight>();
 
-            return room;
+            return sensor;
         }
         /// <summary>
         /// Create sensor

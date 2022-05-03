@@ -31,10 +31,10 @@ namespace home_light.Repositories
 
             var rooms = db.Rooms.ToList();
 
-            foreach (var item in rooms)
-            {
-                item.Sensors ??= new List<Sensor>();
-            }
+            //foreach (var item in rooms)
+            //{
+            //    item.Sensors ??= new List<Sensor>();
+            //}
 
             return rooms;
         }
@@ -52,8 +52,8 @@ namespace home_light.Repositories
                 throw new AccessErrorException("Error - room table not found");
 
             var room = db.Rooms.FirstOrDefault(r => r.Id == id);
-            if (room != null)
-                room.Sensors ??= new List<Sensor>();
+            //if (room != null)
+            //    room.Sensors ??= new List<Sensor>();
 
             return room;
         }
