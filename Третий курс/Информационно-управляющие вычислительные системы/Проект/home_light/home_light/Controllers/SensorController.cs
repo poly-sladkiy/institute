@@ -58,6 +58,46 @@ namespace home_light.Controllers
             return Ok(sensors);
         }
         /// <summary>
+        /// Turn on flash
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("/on/{id}")]
+        public ActionResult TurnOn(int id)
+        {
+            var sensor = _sensors.Get(id);
+            if (sensor == null)
+                return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
+
+            foreach (var item in sensor.Flashlights)
+            {
+                item.IsShining = true;
+            }
+
+            return Ok(new SimpleAnswer() { State = true, Error = "" });
+        }
+        /// <summary>
+        /// Turn on flash
+        /// </summary>
+        /// <param name="id"></param>
+        /// <returns></returns>
+        [HttpPost]
+        [Route("/off/{id}")]
+        public ActionResult TurnOff(int id)
+        {
+            var sensor = _sensors.Get(id);
+            if (sensor == null)
+                return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
+
+            foreach (var item in sensor.Flashlights)
+            {
+                item.IsShining = false;
+            }
+
+            return Ok(new SimpleAnswer() { State = true, Error = "" });
+        }
+        /// <summary>
         /// Delete room
         /// </summary>
         /// <param name="id"></param>
