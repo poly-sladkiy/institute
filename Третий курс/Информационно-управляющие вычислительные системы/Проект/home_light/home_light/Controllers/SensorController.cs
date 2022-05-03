@@ -62,7 +62,7 @@ namespace home_light.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Route("/on/{id}")]
         public ActionResult TurnOn(int id)
         {
@@ -82,7 +82,7 @@ namespace home_light.Controllers
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
-        [HttpPost]
+        [HttpPut]
         [Route("/off/{id}")]
         public ActionResult TurnOff(int id)
         {
