@@ -13,13 +13,16 @@ namespace home_light.Controllers
     public class RoomController : ControllerBase
     {
         readonly RoomRepository _rooms;
+        readonly SensorRepository _sensors;
         /// <summary>
         /// Basic constroctor
         /// </summary>
         /// <param name="rooms"></param>
-        public RoomController(RoomRepository rooms)
+        /// <param name="sensors"></param>
+        public RoomController(RoomRepository rooms, SensorRepository sensors)
         {
             this._rooms = rooms;
+            this._sensors = sensors;
         }
         /// <summary>
         /// Get all rooms
@@ -56,6 +59,47 @@ namespace home_light.Controllers
 
             _rooms.Create(room);
             return Ok(room);
+        }
+        /// <summary>
+        /// Add sensor to room
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="sensorId"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("add-sensor")]
+        public ActionResult AddSensor(int roomId, int sensorId)
+        {
+            var room = _rooms.AddSensor(roomId, sensorId);
+            if (room != null)
+                room.Sensors.ForEach(sensor => sensor.Room = null);
+
+            return Ok(room);
+        }
+        /// <summary>
+        /// Remove sensor from room
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="sensorId"></param>
+        /// <returns></returns>
+        [HttpPut]
+        [Route("remove-sensor")]
+        public ActionResult RemoveSensor(int roomId, int sensorId)
+        {
+            var room = _rooms.Get(roomId);
+            if (room == null)
+                return Ok(new SimpleAnswer() { State = false, Error = "Error - room not found" });
+
+            var sensor = _sensors.Get(sensorId);
+            if (sensor == null)
+                return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
+
+            if (room.Sensors.Any(x => x.Id == sensor.Id))
+                return Ok(new SimpleAnswer() { State = false, Error = "Error - room does not contains this sensor" });
+
+            _rooms.RemoveSensor(room, sensor);
+
+            return Ok(new SimpleAnswer() { State = true, Error = "" });
         }
         /// <summary>
         /// Delete room

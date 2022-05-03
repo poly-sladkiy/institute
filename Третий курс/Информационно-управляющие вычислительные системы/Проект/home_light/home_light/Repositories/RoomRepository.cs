@@ -1,5 +1,6 @@
 ﻿using home_light.Exceptions;
 using home_light.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace home_light.Repositories
 {
@@ -9,13 +10,15 @@ namespace home_light.Repositories
     public class RoomRepository
     {
         readonly ApplicationContext db;
+        readonly SensorRepository _sensors;
         /// <summary>
         /// Base constructor
         /// </summary>
         /// <param name="_db"></param>
-        public RoomRepository(ApplicationContext _db)
+        public RoomRepository(ApplicationContext _db, SensorRepository sensors)
         {
             db = _db;
+            _sensors = sensors;
         }
         /// <summary>
         /// Get all rooms
@@ -29,12 +32,13 @@ namespace home_light.Repositories
             if (db.Rooms == null)
                 throw new AccessErrorException("Error - room table not found");
 
-            var rooms = db.Rooms.ToList();
+            var rooms = db.Rooms
+                .Include(x => x.Sensors)
+                .ThenInclude(x => x.Flashlights)
+                .ToList();
 
-            //foreach (var item in rooms)
-            //{
-            //    item.Sensors ??= new List<Sensor>();
-            //}
+            rooms.ForEach(
+                x => x.Sensors.ForEach(x => x.Room = null));
 
             return rooms;
         }
@@ -51,9 +55,13 @@ namespace home_light.Repositories
             if (db.Rooms == null)
                 throw new AccessErrorException("Error - room table not found");
 
-            var room = db.Rooms.FirstOrDefault(r => r.Id == id);
-            //if (room != null)
-            //    room.Sensors ??= new List<Sensor>();
+            var room = db.Rooms
+                .Include(x => x.Sensors)
+                .ThenInclude(x => x.Flashlights)
+                .FirstOrDefault(r => r.Id == id);
+            
+            if (room != null)
+                room.Sensors.ForEach(x => x.Room = null);
 
             return room;
         }
@@ -75,6 +83,43 @@ namespace home_light.Repositories
                 throw new ValidateErrorException("Error - this name already exist");
 
             db.Rooms.Add(room);
+            db.SaveChanges();
+
+            return room;
+        }
+        /// <summary>
+        /// Add sensor to room
+        /// </summary>
+        /// <param name="roomId"></param>
+        /// <param name="sensorId"></param>
+        /// <returns></returns>
+        public Room? AddSensor(int roomId, int sensorId)
+        {
+            var room = this.Get(roomId);
+            if (room == null)
+                return null;
+
+            var sensor = _sensors.Get(sensorId);
+            if (sensor == null)
+                return null;
+
+            room.Sensors.Add(sensor);
+            sensor.RoomId = roomId;
+
+            db.SaveChanges();
+
+            return room;
+        }
+        /// <summary>
+        /// Remove sensor from room
+        /// </summary>
+        /// <param name="room"></param>
+        /// <param name="sensor"></param>
+        /// <returns></returns>
+        public Room RemoveSensor(Room room, Sensor sensor)
+        {
+            room.Sensors.Remove(sensor);
+            sensor.RoomId = null;
             db.SaveChanges();
 
             return room;
