@@ -20,7 +20,7 @@ namespace home_light.Models
         /// <summary>
         /// Sensors in the room
         /// </summary>
-        public virtual List<Sensor>? Sensors { get; set; }
+        public virtual List<Sensor> Sensors { get; set; } = new List<Sensor>();
         #region ibase
         /// <summary>
         /// Date add

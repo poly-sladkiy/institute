@@ -21,11 +21,11 @@ namespace home_light.Models
         /// <summary>
         /// Data
         /// </summary>
-        public virtual List<Data>? Data { get; set; }
+        public virtual List<Data> Data { get; set; } = new List<Data>();
         /// <summary>
         /// Flashlights
         /// </summary>
-        public virtual List<Flashlight>? Flashlights { get; set; }
+        public virtual List<Flashlight> Flashlights { get; set; } = new List<Flashlight>();
         /// <summary>
         /// Room Id
         /// </summary>
