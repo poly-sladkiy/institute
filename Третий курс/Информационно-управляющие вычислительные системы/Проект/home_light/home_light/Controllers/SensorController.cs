@@ -78,7 +78,7 @@ namespace home_light.Controllers
             return Ok(new SimpleAnswer() { State = true, Error = "" });
         }
         /// <summary>
-        /// Turn on flash
+        /// Turn off flash
         /// </summary>
         /// <param name="id"></param>
         /// <returns></returns>
