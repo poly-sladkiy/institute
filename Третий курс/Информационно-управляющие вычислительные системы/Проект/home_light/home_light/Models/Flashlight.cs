@@ -18,6 +18,10 @@ namespace home_light.Models
         /// </summary>
         public string? Name { get; set; }
         /// <summary>
+        /// Work or no
+        /// </summary>
+        public bool IsShining { get; set; } = false;
+        /// <summary>
         /// Sensor Id
         /// </summary>
         public int? SensorId { get; set; }
@@ -43,7 +47,5 @@ namespace home_light.Models
         [JsonIgnore]
         public bool IsDeleted { get; set; } = false;
         #endregion
-
-
     }
 }
