@@ -6,7 +6,7 @@ using Microsoft.AspNetCore.Mvc;
 namespace home_light.Controllers
 {
     /// <summary>
-    /// Controller for the room
+    /// Controller for the flash
     /// </summary>
     [ApiController]
     [Route("api/flash/")]
