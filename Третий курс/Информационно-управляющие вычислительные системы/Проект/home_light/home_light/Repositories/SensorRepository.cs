@@ -80,6 +80,25 @@ namespace home_light.Repositories
             return sensor;
         }
         /// <summary>
+        /// Turn on / off
+        /// </summary>
+        /// <param name="id"></param>
+        /// <param name="on"></param>
+        public void TurnOnOff(int id, bool on = false)
+        {
+            if (db == null)
+                throw new AccessErrorException("Error - db not found");
+            if (db.Sensors == null)
+                throw new AccessErrorException("Error - sensor table not found");
+
+            var sensor = db.Sensors.FirstOrDefault(x => x.Id == id);
+            if (sensor == null)
+                throw new ValidateErrorException("Error - sensor does not exist");
+
+            sensor.IsShining = on;
+            db.SaveChanges();
+        }
+        /// <summary>
         /// Delete sensor
         /// </summary>
         /// <param name="id"></param>

@@ -70,30 +70,23 @@ namespace home_light.Controllers
             if (sensor == null)
                 return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
 
-            foreach (var item in sensor.Flashlights)
-            {
-                item.IsShining = true;
-            }
-
             return Ok(new SimpleAnswer() { State = true, Error = "" });
         }
         /// <summary>
         /// Turn off flash
         /// </summary>
         /// <param name="id"></param>
+        /// <param name="on"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("/off/{id}")]
-        public ActionResult TurnOff(int id)
+        [Route("/off")]
+        public ActionResult TurnOff(int id, bool on)
         {
             var sensor = _sensors.Get(id);
             if (sensor == null)
                 return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
 
-            foreach (var item in sensor.Flashlights)
-            {
-                item.IsShining = false;
-            }
+            _sensors.TurnOnOff(id, on);
 
             return Ok(new SimpleAnswer() { State = true, Error = "" });
         }
