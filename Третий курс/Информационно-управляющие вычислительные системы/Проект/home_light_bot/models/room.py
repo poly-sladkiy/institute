@@ -1,4 +1,4 @@
-class Rooms:
+class Room:
     def __init__(self, data: dict = None):
         self.id = data.get('id')
         self.name = data.get('name')
