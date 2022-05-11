@@ -58,28 +58,13 @@ namespace home_light.Controllers
             return Ok(sensors);
         }
         /// <summary>
-        /// Turn on flash
-        /// </summary>
-        /// <param name="id"></param>
-        /// <returns></returns>
-        [HttpPut]
-        [Route("/on/{id}")]
-        public ActionResult TurnOn(int id)
-        {
-            var sensor = _sensors.Get(id);
-            if (sensor == null)
-                return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
-
-            return Ok(new SimpleAnswer() { State = true, Error = "" });
-        }
-        /// <summary>
         /// Turn off flash
         /// </summary>
         /// <param name="id"></param>
         /// <param name="on"></param>
         /// <returns></returns>
         [HttpPut]
-        [Route("/off")]
+        [Route("on-off")]
         public ActionResult TurnOff(int id, bool on)
         {
             var sensor = _sensors.Get(id);
