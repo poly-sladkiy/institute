@@ -27,6 +27,10 @@ namespace home_light.Models
         /// </summary>
         public virtual List<Flashlight> Flashlights { get; set; } = new List<Flashlight>();
         /// <summary>
+        /// Work or no
+        /// </summary>
+        public bool IsShining { get; set; } = false;
+        /// <summary>
         /// Room Id
         /// </summary>
         public int? RoomId { get; set; }
