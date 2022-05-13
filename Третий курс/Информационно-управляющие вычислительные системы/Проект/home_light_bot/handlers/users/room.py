@@ -21,13 +21,5 @@ async def get_rooms(message: types.Message):
             keyboard = await RoomInlineKeyBoard(data).get_inline()
 
     await message.answer(f"Идет поиск по комнатам...")
-    if len(data) == 0:
-        await message.answer(f"У вас нет ни одной комнаты")
-    else:
-        inline_keyboard = InlineKeyboardMarkup(
-            row_width=1,
-            inline_keyboard=keyboard,
-        )
-
-        await message.answer(f"Найденные комнаты:",
-                             reply_markup=inline_keyboard)
+    await message.answer(f"Найденные комнаты:",
+                         reply_markup=keyboard)

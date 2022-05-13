@@ -1,7 +1,6 @@
-from aiogram.types import InlineKeyboardButton
-from aiogram.utils.callback_data import CallbackData
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 
-room_detail_callback = CallbackData("room-detail", "id", "name")
+from keyboards.inline.room import room_detail_callback, create_room
 
 
 class RoomInlineKeyBoard:
@@ -20,5 +19,11 @@ class RoomInlineKeyBoard:
                 )
             ]
             self.keys.append(_key)
+        self.keys.append(create_room)
 
-        return self.keys
+        inline_keyboard = InlineKeyboardMarkup(
+            row_width=2,
+            inline_keyboard=self.keys,
+        )
+
+        return inline_keyboard
