@@ -14,3 +14,15 @@ menu_keyboard = ReplyKeyboardMarkup(
     ],
     resize_keyboard=True,
 )
+
+yes_no_keyboard = ReplyKeyboardMarkup(
+    keyboard=[
+        [
+            KeyboardButton(text=Dictionary.yes),
+        ],
+        [
+            KeyboardButton(text=Dictionary.no),
+        ],
+    ],
+    resize_keyboard=True,
+)
