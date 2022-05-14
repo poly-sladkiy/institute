@@ -29,7 +29,7 @@ namespace home_light.Repositories
             if (db.Flashlights == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var flash = db.Flashlights.ToList();
+            var flash = db.Flashlights.Where(x => !x.IsDeleted).ToList();
 
             return flash;
         }

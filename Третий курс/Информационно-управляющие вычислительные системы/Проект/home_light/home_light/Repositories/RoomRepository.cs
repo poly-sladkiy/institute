@@ -33,6 +33,7 @@ namespace home_light.Repositories
                 throw new AccessErrorException("Error - room table not found");
 
             var rooms = db.Rooms
+                .Where(x => !x.IsDeleted)
                 .Include(x => x.Sensors)
                 .ThenInclude(x => x.Flashlights)
                 .ToList();

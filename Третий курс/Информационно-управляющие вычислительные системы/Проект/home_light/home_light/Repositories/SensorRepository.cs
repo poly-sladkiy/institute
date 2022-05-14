@@ -29,7 +29,7 @@ namespace home_light.Repositories
             if (db.Sensors == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var sensor = db.Sensors.ToList();
+            var sensor = db.Sensors.Where(x => !x.IsDeleted).ToList();
 
             //foreach (var item in rooms)
             //{
