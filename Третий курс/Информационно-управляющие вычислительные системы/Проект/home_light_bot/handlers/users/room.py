@@ -17,7 +17,7 @@ from utils.create_inline_keyboard import RoomInlineKeyBoard
 async def get_rooms(message: types.Message):
 
     async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
-        url = f'{IP}/api/flash'
+        url = f'{IP}/api/room'
         async with session.get(
                 url,
                 headers={'content-type': 'application/json'},
@@ -61,7 +61,7 @@ async def commit_room_name(message: types.Message, state: FSMContext):
         await message.answer(f"Добавляем новую комнату...")
 
         async with aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False)) as session:
-            url = f'{IP}/api/flash'
+            url = f'{IP}/api/room'
             async with session.post(
                 url,
                 json={'name': user_data.get('room_name')},
