@@ -1,6 +1,6 @@
 from aiogram.dispatcher.filters.state import StatesGroup, State
 
 
-class RoomCreate(StatesGroup):
+class Create(StatesGroup):
     get_name = State()
     commit = State()

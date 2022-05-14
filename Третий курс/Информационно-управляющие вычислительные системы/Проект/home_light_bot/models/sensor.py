@@ -1,6 +1,10 @@
 import aiohttp
+from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
+
+sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
+sensor_create_callback = CallbackData("sensor-create")
 
 
 class Sensor:
@@ -9,7 +13,8 @@ class Sensor:
         self.name = name if name is not None else None
         self.room_id = room_id if room_id is not None else None
 
-    async def get_all(self):
+    @staticmethod
+    async def get_all():
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
         url = f'{IP}/api/sensor'
         resp = await session.get(
@@ -19,7 +24,8 @@ class Sensor:
 
         return data
 
-    async def get_detail(self, item_id: int = None):
+    @staticmethod
+    async def get_detail(item_id: int = None):
         if item_id is None:
             return
 
@@ -32,7 +38,8 @@ class Sensor:
 
         return data
 
-    async def create_item(self, new_sensor: 'Sensor'):
+    @staticmethod
+    async def create_item(new_sensor: 'Sensor'):
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
         url = f'{IP}/api/sensor'
         resp = await session.post(
@@ -43,7 +50,8 @@ class Sensor:
 
         return data
 
-    async def delete_item(self, item_id: None):
+    @staticmethod
+    async def delete_item(item_id: None):
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
         url = f'{IP}/api/sensor/{item_id}'
         resp = await session.delete(

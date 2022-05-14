@@ -9,7 +9,7 @@ from keyboards.default.dictionary import Dictionary
 from keyboards.default.menu import yes_no_keyboard, menu_keyboard
 from keyboards.inline.room import room_create_callback
 from loader import dp
-from states.room import RoomCreate
+from states.room import Create
 from utils.create_inline_keyboard import RoomInlineKeyBoard
 
 
@@ -34,26 +34,26 @@ async def get_rooms(message: types.Message):
 @dp.callback_query_handler(room_create_callback.filter(), state='*')
 async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContext):
     await call.message.answer(f"Введите название комнаты")
-    await RoomCreate.first()
+    await Create.first()
 
 
-@dp.message_handler(state=RoomCreate.get_name)
+@dp.message_handler(state=Create.get_name)
 async def get_room_name(message: types.Message, state: FSMContext):
     answer = message.text
     await state.update_data(room_name=answer)
-    await RoomCreate.next()
+    await Create.next()
 
     await message.answer(f"Данные верны: {answer}?",
                          reply_markup=yes_no_keyboard)
 
 
-@dp.message_handler(state=RoomCreate.commit)
+@dp.message_handler(state=Create.commit)
 async def commit_room_name(message: types.Message, state: FSMContext):
     answer = message.text
     if answer.lower() == Dictionary.no.lower():
         await message.answer(f"Введите название комнаты снова",
                              reply_markup=ReplyKeyboardRemove())
-        await RoomCreate.get_name.set()
+        await Create.get_name.set()
         return
     elif answer.lower() == Dictionary.yes.lower():
         user_data = await state.get_data()
