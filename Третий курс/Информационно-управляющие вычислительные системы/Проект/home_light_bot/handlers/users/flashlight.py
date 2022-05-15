@@ -61,19 +61,19 @@ async def get_flashlight_name(message: types.Message, state: FSMContext):
 async def commit_flashlight_name(message: types.Message, state: FSMContext):
     answer = message.text
     if answer.lower() == Dictionary.no.lower():
-        await message.answer(f"Введите название сенсора снова",
+        await message.answer(f"Введите название лампочки снова",
                              reply_markup=ReplyKeyboardRemove())
         await FlashlightCreate.get_name.set()
         return
     elif answer.lower() == Dictionary.yes.lower():
         user_data = await state.get_data()
 
-        await message.answer(f"Добавляем новый сенсор...")
+        await message.answer(f"Добавляем новую лампочку...")
 
         flash = Flashlight(name=f"{user_data.get('sensor_name')}")
         await Flashlight.create_item(flash)
 
-        await message.answer(f"Сенсор успешно добавлен...",
+        await message.answer(f"Лампочка успешно добавлен...",
                              reply_markup=menu_keyboard)
 
         await state.reset_state(with_data=True)
