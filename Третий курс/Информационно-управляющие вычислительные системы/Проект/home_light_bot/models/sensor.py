@@ -8,7 +8,7 @@ sensor_create_callback = CallbackData("sensor-create")
 
 
 class Sensor:
-    def __init__(self, item_id, name, room_id):
+    def __init__(self, item_id=None, name=None, room_id=None):
         self.id = item_id if item_id is not None else None
         self.name = name if name is not None else None
         self.room_id = room_id if room_id is not None else None
@@ -21,6 +21,8 @@ class Sensor:
             url,
             headers={'content-type': 'application/json'})
         data = await resp.json()
+
+        await session.close()
 
         return data
 
@@ -35,6 +37,7 @@ class Sensor:
             url,
             headers={'content-type': 'application/json'})
         data = await resp.json()
+        await session.close()
 
         return data
 
@@ -47,6 +50,7 @@ class Sensor:
             json={'name': f'{new_sensor.name}'},
             headers={'content-type': 'application/json'})
         data = await resp.json()
+        await session.close()
 
         return data
 
@@ -58,5 +62,6 @@ class Sensor:
             url,
             headers={'content-type': 'application/json'})
         data = await resp.json()
+        await session.close()
 
         return data
