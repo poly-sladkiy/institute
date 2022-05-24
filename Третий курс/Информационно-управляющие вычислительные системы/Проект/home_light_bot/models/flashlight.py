@@ -1,40 +1,22 @@
-<<<<<<< HEAD
-from models.room import Room
-
-
-class Sensor:
-    def __init__(self, data: dict = None):
-        self.id = data.get('id')
-        self.name = data.get('name')
-        self.data = []  # todo: convert to data types
-        self.flashlight = []  # todo: convert to data types
-        self.room = Room()
-
-    def __str__(self):
-        return f"Сенсор: {self.name}\nЛампочек: {len(self.flashlight)} шт."
-
-    def get_flashlight(self):
-        return self.flashlight
-=======
 import aiohttp
 from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
 
-sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
-sensor_create_callback = CallbackData("sensor-create")
+flashlight_detail_callback = CallbackData("flash-detail", "id", "name")
+flashlight_create_callback = CallbackData("flash-create")
 
 
-class Sensor:
+class Flashlight:
     def __init__(self, item_id=None, name=None, room_id=None):
         self.id = item_id if item_id is not None else None
         self.name = name if name is not None else None
-        self.room_id = room_id if room_id is not None else None
+        self.sensor_id = room_id if room_id is not None else None
 
     @staticmethod
     async def get_all():
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
-        url = f'{IP}/api/sensor'
+        url = f'{IP}/api/flash'
         resp = await session.get(
             url,
             headers={'content-type': 'application/json'})
@@ -50,7 +32,7 @@ class Sensor:
             return
 
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
-        url = f'{IP}/api/sensor/{item_id}'
+        url = f'{IP}/api/flash/{item_id}'
         resp = await session.get(
             url,
             headers={'content-type': 'application/json'})
@@ -60,9 +42,9 @@ class Sensor:
         return data
 
     @staticmethod
-    async def create_item(new_sensor: 'Sensor'):
+    async def create_item(new_sensor: 'Flashlight'):
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
-        url = f'{IP}/api/sensor'
+        url = f'{IP}/api/flash'
         resp = await session.post(
             url,
             json={'name': f'{new_sensor.name}'},
@@ -75,7 +57,7 @@ class Sensor:
     @staticmethod
     async def delete_item(item_id: None):
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
-        url = f'{IP}/api/sensor/{item_id}'
+        url = f'{IP}/api/flash/{item_id}'
         resp = await session.delete(
             url,
             headers={'content-type': 'application/json'})
@@ -83,4 +65,3 @@ class Sensor:
         await session.close()
 
         return data
->>>>>>> origin/master

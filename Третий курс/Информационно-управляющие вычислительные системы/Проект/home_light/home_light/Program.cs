@@ -29,7 +29,7 @@ builder.Services.AddSwaggerGen(c =>
         Contact = new OpenApiContact
         {
             Name = "Ignakov Konstantin & Victor Tihonov",
-            Email = string.Empty,
+            Email = "ignakov37@gmail.com",
         },
         License = new OpenApiLicense
         {
