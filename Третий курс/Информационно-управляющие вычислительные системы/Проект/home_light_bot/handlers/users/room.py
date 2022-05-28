@@ -7,6 +7,7 @@ from data.config import IP
 from filters.room import IsRoom
 from keyboards.default.dictionary import Dictionary
 from keyboards.default.menu import yes_no_keyboard, menu_keyboard
+from keyboards.default.room import add_remove_sensor_keyboard
 from keyboards.inline.room import room_create_callback, room_detail_callback
 from loader import dp
 from models.room import Room
@@ -41,10 +42,14 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
 @dp.callback_query_handler(room_detail_callback.filter(), state='*')
 async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContext):
 
-    data = await Room.get_detail(callback_data.get("id"))
+    room = await Room.get_detail(callback_data.get("id"))
 
-    await call.message.answer(f"{data}",
-                              reply_markup=ReplyKeyboardRemove())
+    await call.message.answer(f"<code>Комната {room.name}</code>\n"
+                              f""
+                              f"Идентификатор: {room.id}\n"
+                              f"Название: {room.name}\n"
+                              f"Сенсоры: {room.sensors if len(room.sensors) > 0 else 'не установлены'}",
+                              reply_markup=add_remove_sensor_keyboard)
 
 
 @dp.message_handler(state=RoomCreate.get_name)

@@ -28,4 +28,6 @@ class Room:
         data = await resp.json()
         await session.close()
 
-        return data
+        room = Room(data)
+
+        return room
