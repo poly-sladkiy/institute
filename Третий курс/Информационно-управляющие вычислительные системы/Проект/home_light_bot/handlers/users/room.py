@@ -11,7 +11,7 @@ from keyboards.default.room import add_remove_sensor_keyboard
 from keyboards.inline.room import room_create_callback, room_detail_callback
 from loader import dp
 from models.room import Room
-from states.room import RoomCreate
+from states.room import RoomCreate, RoomDetail
 from utils.create_inline_keyboard import RoomInlineKeyBoard
 
 
@@ -44,12 +44,28 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
 
     room = await Room.get_detail(callback_data.get("id"))
 
+    await RoomDetail.first()
+
     await call.message.answer(f"<code>Комната {room.name}</code>\n"
-                              f""
+                              f"\n"
                               f"Идентификатор: {room.id}\n"
                               f"Название: {room.name}\n"
                               f"Сенсоры: {room.sensors if len(room.sensors) > 0 else 'не установлены'}",
                               reply_markup=add_remove_sensor_keyboard)
+
+
+@dp.message_handler(state=RoomDetail.view_room)
+async def add_remove_sensor(message: types.Message, state: FSMContext):
+    answer = message.text.strip().lower()
+
+    if answer == Dictionary.add_sensor.lower():
+        await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>")
+        await RoomDetail.add_sensor.set()
+    elif answer == Dictionary.remove_sensor.lower():
+        await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>")
+        await RoomDetail.remove_sensor.set()
+    else:
+        await message.answer("Неверно выбрана команда, повторите снова")
 
 
 @dp.message_handler(state=RoomCreate.get_name)
