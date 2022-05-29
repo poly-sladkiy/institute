@@ -11,6 +11,7 @@ from keyboards.default.room import add_remove_sensor_keyboard
 from keyboards.inline.room import room_create_callback, room_detail_callback
 from loader import dp
 from models.room import Room
+from models.sensor import Sensor
 from states.room import RoomCreate, RoomDetail
 from utils.create_inline_keyboard import RoomInlineKeyBoard
 
@@ -61,7 +62,10 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     if answer == Dictionary.add_sensor.lower():
-        await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>")
+        sensors = await Sensor.get_free(inline=True)
+
+        await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>",
+                             reply_markup=sensors)
         await RoomDetail.add_sensor.set()
     elif answer == Dictionary.remove_sensor.lower():
         await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>")

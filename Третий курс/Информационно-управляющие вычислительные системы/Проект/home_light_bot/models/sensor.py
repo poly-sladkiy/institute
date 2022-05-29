@@ -1,7 +1,9 @@
 import aiohttp
+from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
+from models.room import add_sensor_callback
 
 sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
 sensor_create_callback = CallbackData("sensor-create")
@@ -40,6 +42,41 @@ class Sensor:
         await session.close()
 
         return data
+
+    @staticmethod
+    async def get_free(inline: bool = False):
+        session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
+        url = f'{IP}/api/sensors/free/'
+        resp = await session.get(
+            url,
+            headers={'content-type': 'application/json'})
+        data = await resp.json()
+        await session.close()
+
+        if not inline:
+            sensors = []
+            for i in data:
+                _sensor = Sensor(item_id=i.get("id"), name=i.get("name"))
+                sensors.append(_sensor)
+            return sensors
+
+        else:
+            keys = []
+            for i in data:
+                keys.append([
+                    InlineKeyboardButton(
+                        text=f"{i.get('name')}",
+                        callback_data=add_sensor_callback.new(
+                            id=i.get('id'),
+                            name=i.get('name'))
+                    )
+                ])
+
+            keyboard = InlineKeyboardMarkup(
+                row_width=1,
+                inline_keyboard=keys,
+            )
+            return keyboard
 
     @staticmethod
     async def create_item(new_sensor: 'Sensor'):

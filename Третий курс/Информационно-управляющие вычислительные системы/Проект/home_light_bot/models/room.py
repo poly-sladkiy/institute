@@ -1,6 +1,10 @@
 import aiohttp
+from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
+
+
+add_sensor_callback = CallbackData("add-sensor", "id", "name")
 
 
 class Room:
