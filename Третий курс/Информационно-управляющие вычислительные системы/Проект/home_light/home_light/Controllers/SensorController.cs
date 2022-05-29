@@ -48,7 +48,7 @@ namespace home_light.Controllers
         /// </summary>
         /// <returns></returns>
         [HttpGet]
-        [Route("free")]
+        [Route("/api/sensors/free")]
         public ActionResult GetFreeSensors()
         {
             var sensors = _sensors
