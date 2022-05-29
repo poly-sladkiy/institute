@@ -44,6 +44,21 @@ namespace home_light.Controllers
             return Ok(sensor);
         }
         /// <summary>
+        /// Get free sensors
+        /// </summary>
+        /// <returns></returns>
+        [HttpGet]
+        [Route("free")]
+        public ActionResult GetFreeSensors()
+        {
+            var sensors = _sensors
+                .GetAll()
+                .Where(x => x.Room == null)
+                .ToList();
+
+            return Ok(sensors);
+        }
+        /// <summary>
         /// Create model
         /// </summary>
         /// <param name="sensors"></param>

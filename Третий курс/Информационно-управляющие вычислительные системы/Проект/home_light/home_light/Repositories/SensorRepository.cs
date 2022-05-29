@@ -1,5 +1,6 @@
 ﻿using home_light.Exceptions;
 using home_light.Models;
+using Microsoft.EntityFrameworkCore;
 
 namespace home_light.Repositories
 {
@@ -29,7 +30,10 @@ namespace home_light.Repositories
             if (db.Sensors == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var sensor = db.Sensors.Where(x => !x.IsDeleted).ToList();
+            var sensor = db.Sensors
+                .Where(x => !x.IsDeleted)
+                .Include(x => x.Flashlights)
+                .ToList();
 
             //foreach (var item in rooms)
             //{
