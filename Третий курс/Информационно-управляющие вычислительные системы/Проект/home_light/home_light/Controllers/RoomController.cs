@@ -110,8 +110,16 @@ namespace home_light.Controllers
         [Route("{id}")]
         public ActionResult Delete(int id)
         {
-            _rooms.Delete(id);
-            return Ok(new SimpleAnswer() { State = false, Error = "" });
+            try
+            {
+                _rooms.Delete(id);
+
+            }
+            catch (Exception e)
+            {
+                return Ok(new SimpleAnswer() { State = false, Error = e.Message });
+            }
+            return Ok(new SimpleAnswer() { State = true, Error = "" });
         }
     }
 }

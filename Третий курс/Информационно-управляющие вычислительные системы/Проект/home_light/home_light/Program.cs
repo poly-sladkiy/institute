@@ -62,6 +62,8 @@ var app = builder.Build();
 #region app
 AppContext.SetSwitch("Npgsql.EnableLegacyTimestampBehavior", true);
 
+app.UseDeveloperExceptionPage();
+
 // Configure the HTTP request pipeline.
 app.UseSwagger();
 app.UseSwaggerUI();

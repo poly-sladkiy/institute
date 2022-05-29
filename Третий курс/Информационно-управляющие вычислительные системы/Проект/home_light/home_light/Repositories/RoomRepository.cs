@@ -59,7 +59,7 @@ namespace home_light.Repositories
             var room = db.Rooms
                 .Include(x => x.Sensors)
                 .ThenInclude(x => x.Flashlights)
-                .FirstOrDefault(r => r.Id == id);
+                .FirstOrDefault(r => r.Id == id && !r.IsDeleted);
             
             if (room != null)
                 room.Sensors.ForEach(x => x.Room = null);
@@ -80,7 +80,7 @@ namespace home_light.Repositories
             if (db.Rooms == null)
                 throw new AccessErrorException("Error - room table not found");
 
-            if (db.Rooms.Any(x => x.Name == room.Name))
+            if (db.Rooms.Any(x => x.Name == room.Name && !x.IsDeleted))
                 throw new ValidateErrorException("Error - this name already exist");
 
             db.Rooms.Add(room);
@@ -136,9 +136,10 @@ namespace home_light.Repositories
             if (db.Rooms == null)
                 throw new AccessErrorException("Error - room table not found");
 
-            var room = db.Rooms.FirstOrDefault(x => x.Id == id);
+            var room = db.Rooms
+                .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
             if (room == null)
-                throw new ValidateErrorException("Error - this name already exist");
+                throw new ValidateErrorException("Error - error this room does not exist");
 
             room.IsDeleted = true;
             db.SaveChanges();
