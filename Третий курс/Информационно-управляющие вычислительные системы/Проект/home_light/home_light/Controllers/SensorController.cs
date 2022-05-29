@@ -28,8 +28,8 @@ namespace home_light.Controllers
         [HttpGet]
         public ActionResult<List<Sensor>> Get()
         {
-            var rooms = _sensors.GetAll();
-            return Ok(rooms);
+            var sensors = _sensors.GetAll();
+            return Ok(sensors);
         }
         /// <summary>
         /// Get room by id
@@ -40,8 +40,8 @@ namespace home_light.Controllers
         [Route("{id}")]
         public ActionResult<Sensor> GetById(int id)
         {
-            var room = _sensors.Get(id);
-            return Ok(room);
+            var sensor = _sensors.Get(id);
+            return Ok(sensor);
         }
         /// <summary>
         /// Create model

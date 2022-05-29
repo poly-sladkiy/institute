@@ -43,7 +43,7 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
 async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContext):
 
     room = await Room.get_detail(callback_data.get("id"))
-    await state.update_data(room_id=room)
+    await state.update_data(room_id=room.id)
 
     await RoomDetail.first()
 
