@@ -31,3 +31,18 @@ class Room:
         room = Room(data)
 
         return room
+
+    @staticmethod
+    async def remove_room(item_id: int = None):
+        if item_id is None:
+            return False
+
+        session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
+        url = f'{IP}/api/room/{item_id}'
+        resp = await session.delete(
+            url,
+            headers={'content-type': 'application/json'})
+        data = await resp.json()
+        await session.close()
+
+        return data.get('state')

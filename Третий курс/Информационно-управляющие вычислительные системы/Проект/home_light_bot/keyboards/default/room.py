@@ -10,6 +10,9 @@ add_remove_sensor_keyboard = ReplyKeyboardMarkup(
         [
             KeyboardButton(text=Dictionary.remove_sensor),
         ],
+        [
+            KeyboardButton(text=Dictionary.remove_room),
+        ],
     ],
     resize_keyboard=True,
 )

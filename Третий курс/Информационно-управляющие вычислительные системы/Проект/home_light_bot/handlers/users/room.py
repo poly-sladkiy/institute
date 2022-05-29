@@ -43,6 +43,7 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
 async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContext):
 
     room = await Room.get_detail(callback_data.get("id"))
+    await state.update_data(room_id=room)
 
     await RoomDetail.first()
 
@@ -57,6 +58,7 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
 @dp.message_handler(state=RoomDetail.view_room)
 async def add_remove_sensor(message: types.Message, state: FSMContext):
     answer = message.text.strip().lower()
+    data = await state.get_data()
 
     if answer == Dictionary.add_sensor.lower():
         await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>")
@@ -64,6 +66,15 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
     elif answer == Dictionary.remove_sensor.lower():
         await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>")
         await RoomDetail.remove_sensor.set()
+    elif answer == Dictionary.remove_room.lower():
+        await message.answer("Идет удаление комнаты...",
+                             reply_markup=ReplyKeyboardRemove())
+        state = await Room.remove_room(data.get('room_id'))
+        if state:
+            await message.answer("Комната успешно удалена")
+        else:
+            await message.answer("Произошла ошибка при удалении комнаты")
+
     else:
         await message.answer("Неверно выбрана команда, повторите снова")
 

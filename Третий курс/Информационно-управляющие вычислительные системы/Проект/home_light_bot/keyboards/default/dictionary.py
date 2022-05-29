@@ -8,3 +8,4 @@ class Dictionary:
 
     add_sensor = 'Добавить сенсор'
     remove_sensor = 'Удалить сенсор'
+    remove_room = 'Удалить комнату'
