@@ -73,7 +73,7 @@ namespace home_light.Controllers
             var room = _rooms.AddSensor(roomId, sensorId);
             if (room != null)
                 room.Sensors?.ForEach(sensor => sensor.Room = null);
-
+            
             return Ok(room);
         }
         /// <summary>
