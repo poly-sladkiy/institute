@@ -88,6 +88,11 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
 @dp.callback_query_handler(add_sensor_callback.filter(), state=RoomDetail.add_sensor)
 async def add_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
     await call.message.answer("Идет добавление нового сенсора...")
+    await Room.add_sensor(
+        sensor_id=callback_data.get('sensor_id'),
+        room_id=callback_data.get('room_id'))
+    await call.message.answer("Сенсор успешно добавлен",
+                              reply_markup=menu_keyboard)
 
 
 @dp.message_handler(state=RoomCreate.get_name)

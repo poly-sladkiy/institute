@@ -61,4 +61,12 @@ class Room:
 
     @staticmethod
     async def add_sensor(room_id: int = None, sensor_id: int = None):
-        pass
+        session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
+        url = f'{IP}/api/room/add-sensor?roomId={room_id}&sensorId={sensor_id}'
+        resp = await session.put(
+            url,
+            headers={'content-type': 'application/json'})
+
+        data = await resp.json()
+
+        await session.close()
