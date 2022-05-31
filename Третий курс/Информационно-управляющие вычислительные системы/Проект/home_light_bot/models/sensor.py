@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
-from models.room import add_sensor_callback
+from states.room import add_sensor_callback
 
 sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
 sensor_create_callback = CallbackData("sensor-create")
@@ -14,6 +14,9 @@ class Sensor:
         self.id = item_id if item_id is not None else None
         self.name = name if name is not None else None
         self.room_id = room_id if room_id is not None else None
+
+    def __str__(self):
+        return self.name
 
     @staticmethod
     async def get_all():
@@ -44,7 +47,7 @@ class Sensor:
         return data
 
     @staticmethod
-    async def get_free(inline: bool = False):
+    async def get_free(inline: bool = False, room_id: int = None):
         session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
         url = f'{IP}/api/sensors/free/'
         resp = await session.get(
@@ -67,8 +70,9 @@ class Sensor:
                     InlineKeyboardButton(
                         text=f"{i.get('name')}",
                         callback_data=add_sensor_callback.new(
-                            id=i.get('id'),
-                            name=i.get('name'))
+                            sensor_id=i.get('id'),
+                            room_id=room_id,
+                            name=i.get('name')),
                     )
                 ])
 

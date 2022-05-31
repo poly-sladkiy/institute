@@ -12,7 +12,7 @@ from keyboards.inline.room import room_create_callback, room_detail_callback
 from loader import dp
 from models.room import Room
 from models.sensor import Sensor
-from states.room import RoomCreate, RoomDetail
+from states.room import RoomCreate, RoomDetail, add_sensor_callback
 from utils.create_inline_keyboard import RoomInlineKeyBoard
 
 
@@ -52,7 +52,7 @@ async def create_room(call: CallbackQuery, callback_data: dict, state: FSMContex
                               f"\n"
                               f"Идентификатор: {room.id}\n"
                               f"Название: {room.name}\n"
-                              f"Сенсоры: {room.sensors if len(room.sensors) > 0 else 'не установлены'}",
+                              f"Сенсоры: {room.get_sensors() if len(room.sensors) > 0 else 'не установлены'}",
                               reply_markup=add_remove_sensor_keyboard)
 
 
@@ -62,14 +62,16 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     if answer == Dictionary.add_sensor.lower():
-        sensors = await Sensor.get_free(inline=True)
+        sensors = await Sensor.get_free(inline=True, room_id=data.get('room_id'))
 
         await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>",
                              reply_markup=sensors)
         await RoomDetail.add_sensor.set()
+
     elif answer == Dictionary.remove_sensor.lower():
         await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>")
         await RoomDetail.remove_sensor.set()
+
     elif answer == Dictionary.remove_room.lower():
         await message.answer("Идет удаление комнаты...",
                              reply_markup=ReplyKeyboardRemove())
@@ -81,6 +83,11 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
 
     else:
         await message.answer("Неверно выбрана команда, повторите снова")
+
+
+@dp.callback_query_handler(add_sensor_callback.filter(), state=RoomDetail.add_sensor)
+async def add_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    await call.message.answer("Идет добавление нового сенсора...")
 
 
 @dp.message_handler(state=RoomCreate.get_name)
