@@ -33,6 +33,7 @@ namespace home_light.Repositories
             var sensor = db.Sensors
                 .Where(x => !x.IsDeleted)
                 .Include(x => x.Flashlights)
+                .Include(x => x.Room)
                 .ToList();
 
             //foreach (var item in rooms)
