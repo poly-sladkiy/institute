@@ -94,7 +94,7 @@ namespace home_light.Controllers
             if (sensor == null)
                 return Ok(new SimpleAnswer() { State = false, Error = "Error - sensor not found" });
 
-            if (room.Sensors.Any(x => x.Id == sensor.Id))
+            if (room.Sensors.Any(x => x.RoomId == sensor.Id))
                 return Ok(new SimpleAnswer() { State = false, Error = "Error - room does not contains this sensor" });
 
             _rooms.RemoveSensor(room, sensor);
