@@ -12,7 +12,7 @@ from keyboards.inline.room import room_create_callback, room_detail_callback
 from loader import dp
 from models.room import Room
 from models.sensor import Sensor
-from states.room import RoomCreate, RoomDetail, add_sensor_callback
+from states.room import RoomCreate, RoomDetail, add_sensor_callback, remove_sensor_callback
 from utils.create_inline_keyboard import RoomInlineKeyBoard
 
 
@@ -93,6 +93,18 @@ async def add_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext
         room_id=callback_data.get('room_id'))
     await call.message.answer("Сенсор успешно добавлен",
                               reply_markup=menu_keyboard)
+    await state.reset_state()\
+
+
+@dp.callback_query_handler(remove_sensor_callback.filter(), state=RoomDetail.remove_sensor)
+async def remove_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    await call.message.answer("Идет удаление сенсора...")
+    await Room.remove_sensor(
+        sensor_id=callback_data.get('sensor_id'),
+        room_id=callback_data.get('room_id'))
+    await call.message.answer("Сенсор успешно удален",
+                              reply_markup=menu_keyboard)
+    await state.reset_state()
 
 
 @dp.message_handler(state=RoomCreate.get_name)
