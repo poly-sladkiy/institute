@@ -20,7 +20,7 @@ namespace home_light.Models
         /// <summary>
         /// Sensor Id
         /// </summary>
-        public int SensorId { get; set; }
+        public int? SensorId { get; set; }
         /// <summary>
         /// Sensor
         /// </summary>
