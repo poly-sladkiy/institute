@@ -3,7 +3,7 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
-from states.room import add_sensor_callback
+from states.room import add_sensor_callback, remove_sensor_callback
 
 sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
 sensor_create_callback = CallbackData("sensor-create")
@@ -80,7 +80,7 @@ class Sensor:
                 row_width=1,
                 inline_keyboard=keys,
             )
-            return keyboard
+            return keyboard, len(keys)
 
     @staticmethod
     async def create_item(new_sensor: 'Sensor'):
@@ -94,6 +94,36 @@ class Sensor:
         await session.close()
 
         return data
+
+    @staticmethod
+    async def get_room_for_delete(room_id: int = None):
+        session = aiohttp.ClientSession(connector=aiohttp.TCPConnector(verify_ssl=False))
+        url = f'{IP}/api/room/{room_id}'
+        resp = await session.get(
+            url,
+            headers={'content-type': 'application/json'})
+        data = await resp.json()
+        sensors = data.get('sensors')
+        await session.close()
+
+        keys = []
+        for i in sensors:
+            keys.append([
+                    InlineKeyboardButton(
+                        text=f"{i.get('name')}",
+                        callback_data=remove_sensor_callback.new(
+                            sensor_id=i.get('id'),
+                            room_id=room_id,
+                            name=i.get('name')),
+                    )
+                ])
+
+        keyboard = InlineKeyboardMarkup(
+            row_width=1,
+            inline_keyboard=keys,
+        )
+
+        return keyboard, len(keys)
 
     @staticmethod
     async def delete_item(item_id: None):
