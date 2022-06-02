@@ -3,16 +3,17 @@ from aiogram.types import InlineKeyboardButton, InlineKeyboardMarkup
 from aiogram.utils.callback_data import CallbackData
 
 from data.config import IP
+import models.room
 from states.room import add_sensor_callback, remove_sensor_callback
 
 
-
-
 class Sensor:
-    def __init__(self, item_id=None, name=None, room_id=None):
+    def __init__(self, item_id=None, name=None, room_id=None, room_data=None):
         self.id = item_id if item_id is not None else None
         self.name = name if name is not None else None
         self.room_id = room_id if room_id is not None else None
+
+        self.room = models.room.Room(room_data) if room_data is not None else None
 
     def __str__(self):
         return self.name
@@ -43,7 +44,14 @@ class Sensor:
         data = await resp.json()
         await session.close()
 
-        return data
+        sensor = Sensor(
+            item_id=data.get("id"),
+            name=data.get("name"),
+            room_id=data.get("roomId"),
+            room_data=data.get("room")
+        )
+
+        return sensor
 
     @staticmethod
     async def get_free(inline: bool = False, room_id: int = None):

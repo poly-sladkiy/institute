@@ -7,7 +7,7 @@ from keyboards.default.dictionary import Dictionary
 from keyboards.default.menu import yes_no_keyboard, menu_keyboard
 from keyboards.inline.sensor import create_sensor_inline
 from loader import dp
-from models.sensor import Sensor
+import models.sensor
 from states.sensor import SensorCreate, sensor_detail_callback, sensor_create_callback
 
 
@@ -16,7 +16,7 @@ async def get_sensors(message: types.Message):
     await message.answer(f"Идет поиск по сенсорам...")
 
     keys = []
-    sensors = await Sensor.get_all()
+    sensors = await models.sensor.Sensor.get_all()
     for sensor in sensors:
         keys.append([
             InlineKeyboardButton(
@@ -37,16 +37,23 @@ async def get_sensors(message: types.Message):
                          reply_markup=keyboard)
 
 
+@dp.callback_query_handler(sensor_detail_callback.filter(), state='*')
+async def detail_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    sensor_id = callback_data.get("id")
+    sensor = await models.sensor.Sensor.get_detail(sensor_id)
+
+    await call.message.answer(f"<code>Сенсор {sensor.name}</code>\n\n"
+                              f"Идентификатор: {sensor.id}\n"
+                              f"Название: {sensor.name}\n"
+                              f"Комната: {sensor.room.name if sensor.room is not None else 'не устновлена'}")
+
+
 @dp.callback_query_handler(sensor_create_callback.filter(), state='*')
 async def create_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
     await call.message.answer(f"Введите название сенсора",
                               reply_markup=ReplyKeyboardRemove())
     await SensorCreate.first()
 
-
-@dp.callback_query_handler(sensor_detail_callback.filter(), state='*')
-async def detail_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
-    pass
 
 @dp.message_handler(state=SensorCreate.get_name)
 async def get_sensor_name(message: types.Message, state: FSMContext):
@@ -71,8 +78,8 @@ async def commit_sensor_name(message: types.Message, state: FSMContext):
 
         await message.answer(f"Добавляем новый сенсор...")
 
-        sensor = Sensor(name=f"{user_data.get('sensor_name')}")
-        await Sensor.create_item(sensor)
+        sensor = models.sensor.Sensor(name=f"{user_data.get('sensor_name')}")
+        await models.sensor.Sensor.create_item(sensor)
 
         await message.answer(f"Сенсор успешно добавлен...",
                              reply_markup=menu_keyboard)

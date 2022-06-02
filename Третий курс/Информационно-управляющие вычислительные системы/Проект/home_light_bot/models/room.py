@@ -11,12 +11,12 @@ class Room:
         self.name = data.get('name')
 
         self.sensors = []
-
-        if len(data.get('sensors')) < 0:
-            self.sensors = []  # todo: convert to sensors types
-        else:
-            for i in data.get('sensors'):
-                self.sensors.append(Sensor(item_id=i.get('id'), name=i.get('name')))
+        if data.get('sensors') is not None:
+            if len(data.get('sensors')) < 0:
+                self.sensors = []
+            else:
+                for i in data.get('sensors'):
+                    self.sensors.append(Sensor(item_id=i.get('id'), name=i.get('name')))
 
     def __str__(self):
         return f"Комната: {self.name}"
