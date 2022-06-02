@@ -7,8 +7,8 @@ from keyboards.default.dictionary import Dictionary
 from keyboards.default.menu import yes_no_keyboard, menu_keyboard
 from keyboards.inline.sensor import create_sensor_inline
 from loader import dp
-from models.sensor import Sensor, sensor_detail_callback, sensor_create_callback
-from states.sensor import SensorCreate
+from models.sensor import Sensor
+from states.sensor import SensorCreate, sensor_detail_callback, sensor_create_callback
 
 
 @dp.message_handler(IsSensor())
@@ -43,6 +43,10 @@ async def create_sensor(call: CallbackQuery, callback_data: dict, state: FSMCont
                               reply_markup=ReplyKeyboardRemove())
     await SensorCreate.first()
 
+
+@dp.callback_query_handler(sensor_detail_callback.filter(), state='*')
+async def detail_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext):
+    pass
 
 @dp.message_handler(state=SensorCreate.get_name)
 async def get_sensor_name(message: types.Message, state: FSMContext):

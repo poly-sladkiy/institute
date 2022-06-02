@@ -9,7 +9,7 @@ from keyboards.inline.flashlight import create_flashlight_inline
 from keyboards.inline.sensor import create_sensor_inline
 from loader import dp
 from models.flashlight import flashlight_create_callback, Flashlight, flashlight_detail_callback
-from models.sensor import Sensor, sensor_detail_callback, sensor_create_callback
+from models.sensor import Sensor
 from states.flashlight import FlashlightCreate
 from states.sensor import SensorCreate
 

@@ -5,8 +5,7 @@ from aiogram.utils.callback_data import CallbackData
 from data.config import IP
 from states.room import add_sensor_callback, remove_sensor_callback
 
-sensor_detail_callback = CallbackData("sensor-detail", "id", "name")
-sensor_create_callback = CallbackData("sensor-create")
+
 
 
 class Sensor:
