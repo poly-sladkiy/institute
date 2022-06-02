@@ -29,6 +29,13 @@ namespace home_light.Controllers
         public ActionResult<List<Sensor>> Get()
         {
             var sensors = _sensors.GetAll();
+            
+            sensors.ForEach(x =>
+            {
+                if (x.Room != null)
+                    x.Room.Sensors = null;
+            });
+            
             return Ok(sensors);
         }
         /// <summary>

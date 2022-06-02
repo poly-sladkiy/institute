@@ -62,24 +62,37 @@ async def add_remove_sensor(message: types.Message, state: FSMContext):
     data = await state.get_data()
 
     if answer == Dictionary.add_sensor.lower():
-        sensors = await Sensor.get_free(inline=True, room_id=data.get('room_id'))
+        sensors, count = await Sensor.get_free(inline=True, room_id=data.get('room_id'))
 
-        await message.answer("Выберете какой сенсор вы хотите <b>добавить</b>",
-                             reply_markup=sensors)
-        await RoomDetail.add_sensor.set()
+        if count > 0:
+            await message.answer(f"Выберете какой сенсор вы хотите <b>добавить</b>",
+                                 reply_markup=sensors)
+            await RoomDetail.add_sensor.set()
+        else:
+            await message.answer(f"Свободных сенсоров не найдено",
+                                 reply_markup=menu_keyboard)
 
     elif answer == Dictionary.remove_sensor.lower():
-        await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>")
-        await RoomDetail.remove_sensor.set()
+
+        sensors, count = await Sensor.get_room_for_delete(room_id=data.get('room_id'))
+
+        if count > 0:
+            await message.answer("Выберете какой сенсор вы хотите <b>удалить</b>",
+                                 reply_markup=sensors)
+            await RoomDetail.remove_sensor.set()
+        else:
+            await message.answer("Сенсоров в этой комнате не найдено")
 
     elif answer == Dictionary.remove_room.lower():
         await message.answer("Идет удаление комнаты...",
                              reply_markup=ReplyKeyboardRemove())
         state = await Room.remove_room(data.get('room_id'))
         if state:
-            await message.answer("Комната успешно удалена")
+            await message.answer("Комната успешно удалена",
+                                 reply_markup=menu_keyboard)
         else:
-            await message.answer("Произошла ошибка при удалении комнаты")
+            await message.answer("Произошла ошибка при удалении комнаты",
+                                 reply_markup=menu_keyboard)
 
     else:
         await message.answer("Неверно выбрана команда, повторите снова")
@@ -93,7 +106,7 @@ async def add_sensor(call: CallbackQuery, callback_data: dict, state: FSMContext
         room_id=callback_data.get('room_id'))
     await call.message.answer("Сенсор успешно добавлен",
                               reply_markup=menu_keyboard)
-    await state.reset_state()\
+    await state.reset_state()
 
 
 @dp.callback_query_handler(remove_sensor_callback.filter(), state=RoomDetail.remove_sensor)

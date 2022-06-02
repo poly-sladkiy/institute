@@ -60,9 +60,6 @@ namespace home_light.Repositories
                 .Include(x => x.Sensors)
                 .ThenInclude(x => x.Flashlights)
                 .FirstOrDefault(r => r.Id == id && !r.IsDeleted);
-            
-            if (room != null)
-                room.Sensors.ForEach(x => x.Room = null);
 
             return room;
         }
@@ -117,10 +114,14 @@ namespace home_light.Repositories
         /// <param name="room"></param>
         /// <param name="sensor"></param>
         /// <returns></returns>
-        public Room RemoveSensor(Room room, Sensor sensor)
+        public Room RemoveSensor(int roomId, int sensorId)
         {
+            var room = Get(roomId);
+            var sensor = _sensors.Get(sensorId);
+
             room.Sensors.Remove(sensor);
             sensor.RoomId = null;
+            sensor.Room = null;
             db.SaveChanges();
 
             return room;
@@ -137,9 +138,16 @@ namespace home_light.Repositories
                 throw new AccessErrorException("Error - room table not found");
 
             var room = db.Rooms
+                .Include(x => x.Sensors)
                 .FirstOrDefault(x => x.Id == id && !x.IsDeleted);
             if (room == null)
                 throw new ValidateErrorException("Error - error this room does not exist");
+
+            room.Sensors.ForEach(x =>
+            {
+                x.Room = null;
+                x.RoomId = null;
+            });
 
             room.IsDeleted = true;
             db.SaveChanges();
