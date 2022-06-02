@@ -44,6 +44,8 @@ namespace home_light.Controllers
         public ActionResult<Room> GetById(int id)
         {
             var room = _rooms.Get(id);
+            room?.Sensors?.ForEach(x => x.Room = null);
+            
             return Ok(room);
         }
         /// <summary>

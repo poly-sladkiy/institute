@@ -60,9 +60,6 @@ namespace home_light.Repositories
                 .Include(x => x.Sensors)
                 .ThenInclude(x => x.Flashlights)
                 .FirstOrDefault(r => r.Id == id && !r.IsDeleted);
-            
-            if (room != null)
-                room.Sensors.ForEach(x => x.Room = null);
 
             return room;
         }
