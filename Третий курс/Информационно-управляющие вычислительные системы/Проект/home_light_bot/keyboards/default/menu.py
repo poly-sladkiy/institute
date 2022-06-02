@@ -9,7 +9,7 @@ menu_keyboard = ReplyKeyboardMarkup(
             KeyboardButton(text=Dictionary.sensors),
         ],
         [
-            KeyboardButton(text=Dictionary.flash),
+            # KeyboardButton(text=Dictionary.flash),
         ],
     ],
     resize_keyboard=True,
