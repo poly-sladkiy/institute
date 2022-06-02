@@ -56,9 +56,9 @@ namespace home_light.Repositories
             if (db.Sensors == null)
                 throw new AccessErrorException("Error - sensor table not found");
 
-            var sensor = db.Sensors.FirstOrDefault(r => r.Id == id);
-            //if (room != null)
-            //    room.Flashlights ??= new List<Flashlight>();
+            var sensor = db.Sensors
+                .Include(x => x.Room)
+                .FirstOrDefault(r => r.Id == id);
 
             return sensor;
         }

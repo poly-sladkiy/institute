@@ -48,6 +48,8 @@ namespace home_light.Controllers
         public ActionResult<Sensor> GetById(int id)
         {
             var sensor = _sensors.Get(id);
+            sensor.Room.Sensors = null;
+
             return Ok(sensor);
         }
         /// <summary>
