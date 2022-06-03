@@ -7,3 +7,7 @@ sensor_create_callback = CallbackData("sensor-create")
 class SensorCreate(StatesGroup):
     get_name = State()
     commit = State()
+
+
+class SensorDetail(StatesGroup):
+    view_sensor = State()

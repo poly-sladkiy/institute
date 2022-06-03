@@ -5,10 +5,11 @@ from aiogram.types import ReplyKeyboardRemove, InlineKeyboardButton, InlineKeybo
 from filters.room import IsSensor
 from keyboards.default.dictionary import Dictionary
 from keyboards.default.menu import yes_no_keyboard, menu_keyboard
+from keyboards.default.sensor import remove_sensor_keyboard
 from keyboards.inline.sensor import create_sensor_inline
 from loader import dp
 import models.sensor
-from states.sensor import SensorCreate, sensor_detail_callback, sensor_create_callback
+from states.sensor import SensorCreate, sensor_detail_callback, sensor_create_callback, SensorDetail
 
 
 @dp.message_handler(IsSensor())
@@ -42,10 +43,31 @@ async def detail_sensor(call: CallbackQuery, callback_data: dict, state: FSMCont
     sensor_id = callback_data.get("id")
     sensor = await models.sensor.Sensor.get_detail(sensor_id)
 
+    await SensorDetail.first()
+    await state.update_data(sensor_id=sensor_id)
+
     await call.message.answer(f"<code>Сенсор {sensor.name}</code>\n\n"
                               f"Идентификатор: {sensor.id}\n"
                               f"Название: {sensor.name}\n"
-                              f"Комната: {sensor.room.name if sensor.room is not None else 'не устновлена'}")
+                              f"Комната: {sensor.room.name if sensor.room is not None else 'не устновлена'}",
+                              reply_markup=remove_sensor_keyboard
+                              )
+
+
+@dp.message_handler(state=SensorDetail.view_sensor)
+async def commit_sensor_name(message: types.Message, state: FSMContext):
+    answer = message.text.lower()
+    data = await state.get_data()
+
+    if answer == Dictionary.remove_sensor.lower():
+        await message.answer(f"Идет удаление сенсора")
+        await models.sensor.Sensor.delete_item(data.get("sensor_id"))
+        await message.answer(f"Сенсор успешно удален",
+                             reply_markup=ReplyKeyboardRemove())
+    else:
+        await message.answer(f"Не верный формат ответа")
+
+    await state.reset_state(with_data=True)
 
 
 @dp.callback_query_handler(sensor_create_callback.filter(), state='*')
