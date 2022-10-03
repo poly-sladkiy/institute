@@ -51,8 +51,8 @@ def decrypt(text: str, table: list):
 
 
 if __name__ == '__main__':
-    print('Исходный текст:', text := input("Введите текст для шифрования: ").strip().lower())
-    print('Ключ:', key := input("Введите ключ для шифрования: ").strip().lower())
+    print('Исходный текст:', text := input("Введите текст для шифрования: ").strip().lower().replace('ё', 'е'))
+    print('Ключ:', key := input("Введите ключ для шифрования: ").strip().lower().replace('ё', 'е'))
 
     # text = 'Игнаков К.М.'.lower()
     # key = 'тест'.lower()
