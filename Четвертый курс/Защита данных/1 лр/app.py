@@ -1,84 +1,69 @@
-abc = ['а','б','в','г','д','е','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я']
-specs = ' ,.:;-!?)('
+import numpy as np
 
-text = '''Игнаков Константин Михайлович'''
+rows = 5
+column = 7
 
-sentense = [i.lower() for i in text]
+russian_alpabeth = (chr(i) for i in range(ord('а'), ord('я') + 1))
 
-for i in specs:
-    while sentense.count(i) > 0:
-        sentense.pop(sentense.index(i))
-sentense = ''.join(sentense)
+def create_table(key: str):
+    start_words = []
+    updated_alpbeth = list(russian_alpabeth)
+    updated_alpbeth.append(' ')
+    updated_alpbeth.append('.')
+    updated_alpbeth.append(',')
+    
+    for i in key:
+        if i not in start_words:
+            start_words.append(i)
+            updated_alpbeth.remove(i)
 
-key = 'политех'
+    updated_alpbeth.sort()
+    updated_alpbeth = start_words + updated_alpbeth
 
-print(f"Исходный текст: {text}\n"
-      f"Ключ: {key}")
+    table = np.array(updated_alpbeth).reshape((rows, column))
+    table.astype('str')
 
-addSymbol = 'х'
-preList = ['','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','','']
+    return table, updated_alpbeth
 
-for i in range(len(key)):
-    preList[i] = key[i]
 
-abcWithoutKey = abc
-for i in key:
-    abcWithoutKey.pop(abcWithoutKey.index(i))
-abc = ['а','б','в','г','д','е','ж','з','и','й','к','л','м','н','о','п','р','с','т','у','ф','х','ц','ч','ш','щ','ъ','ы','ь','э','ю','я']
+def encrypt(text: str, table: list):
+    answer = ''
 
-for i in range(len(key), len(preList)):
-    preList[i] = abcWithoutKey[i - len(key)]
+    for i in text:
+        new_index = table.index(i) + column
+        answer += table[new_index % (rows * column)]
 
-codeList = [
-    ['','','','','','','',''],
-    ['','','','','','','',''],
-    ['','','','','','','',''],
-    ['','','','','','','','']
-]
-tmp = 0
-for i in range(4):
-    for j in range(8):
-        codeList[i][j] = preList[tmp]
-        tmp += 1
+    return answer
 
-del tmp, abcWithoutKey, specs, preList
 
-sentenseReacharge = []
-for i in range(0, len(sentense), 2):
-    try:
-        if sentense[i] != sentense[i + 1]:
-            sentenseReacharge.append(sentense[i] + sentense[i + 1])
+def decrypt(text: str, table: list):
+    answer = ''
+
+    for i in text:
+        new_index = table.index(i) - column
+
+        if new_index >= 0:
+            answer += table[new_index]
         else:
-            sentense = sentense[:i + 1] + addSymbol + sentense[i + 1:]
-            sentenseReacharge.append(sentense[i] + sentense[i + 1])
-    except IndexError:
-        sentenseReacharge.append(sentense[-1] + addSymbol)
+            answer += table[rows * column - new_index]
 
-del sentense
+    return answer
 
-def takeIndex(code):
-    global codeList
-    ans = [[i, _list.index(code)] for i,_list in enumerate(codeList) if code in codeList[i]]
-    return ans
 
-def Check(indexF, indexS):
-    global codeList
-    if indexF[0][1] == indexS[0][1]: #collumn
-        (indexF[0][0] + 3) % 4, (indexS[0][0] + 3) % 4
-    elif indexF[0][0] == indexS[0][0]: #line
-        (indexF[0][1] + 7) % 8, (indexS[0][1] + 7) % 8
-    else: #square
-        buf = indexF[0][1]
-        indexF[0][1] = indexS[0][1]
-        indexS[0][1] = buf
-    return indexF, indexS
+if __name__ == '__main__':
+    print('Исходный текст:', text := input("Введите текст для шифрования: ").strip().lower().replace('ё', 'е'))
+    print('Ключ:', key := input("Введите ключ для шифрования: ").strip().lower().replace('ё', 'е'))
 
-codes = []
-for code in sentenseReacharge:
-    codes.append(Check(takeIndex(code[0]), takeIndex(code[1])))
+    # text = 'Игнаков К.М.'.lower()
+    # key = 'тест'.lower()
 
-AnswerIndex = ''
-for i in codes:
-    AnswerIndex += codeList[i[0][0][0]][i[0][0][1]]
-    AnswerIndex += codeList[i[1][0][0]][i[1][0][1]]
-print(f"Шифр текст: {AnswerIndex}")
+    table, slice_array = create_table(key)
+    print(f'Таблица с ключем:\n{table}', end='\n\n')
+
+    text_encrypt = encrypt(text, slice_array)
+    print(f"Зашифрованный текст: {text_encrypt}")
+
+    decrypt_table = slice_array.copy()
+    decrypt_text = decrypt(text_encrypt, decrypt_table)
+
+    print(f'Расшифрованный текст: {decrypt_text}')
