@@ -15,7 +15,7 @@ if __name__ == '__main__':
     print('Ключ:', key := str(input("Введите ключ для шифрования: ")))
 
     encode_text = xor_crypt_string(text, key)
-    print('Зашифрованный текст:', encode_text)
+    print('Зашифрованный текст:', encode_text, 'в бинарном виде:', ' '.join(format(ord(x), 'b') for x in encode_text))
 
     decode_text = xor_crypt_string(encode_text, key)
     print('Расшифрованный текст:', decode_text)
