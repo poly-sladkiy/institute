@@ -45,7 +45,7 @@ def decrypt(text: str, table: list):
         if new_index >= 0:
             answer += table[new_index]
         else:
-            answer += table[rows * column - new_index]
+            answer += table[rows * column - abs(new_index)]
 
     return answer
 
