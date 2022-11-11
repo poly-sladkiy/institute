@@ -8,23 +8,23 @@ russian_alpabeth = (chr(i) for i in range(ord('а'), ord('я') + 1))
 
 def create_table(key: str):
     start_words = []
-    updated_alpbeth = list(russian_alpabeth)
-    updated_alpbeth.append(' ')
-    updated_alpbeth.append('.')
-    updated_alpbeth.append(',')
+    updated_alphabet = list(russian_alpabeth)
+    updated_alphabet.append(' ')
+    updated_alphabet.append('.')
+    updated_alphabet.append(',')
     
     for i in key:
         if i not in start_words:
             start_words.append(i)
-            updated_alpbeth.remove(i)
+            updated_alphabet.remove(i)
 
-    updated_alpbeth.sort()
-    updated_alpbeth = start_words + updated_alpbeth
+    updated_alphabet.sort()
+    updated_alphabet = start_words + updated_alphabet
 
-    table = np.array(updated_alpbeth).reshape((rows, column))
+    table = np.array(updated_alphabet).reshape((rows, column))
     table.astype('str')
 
-    return table, updated_alpbeth
+    return table, updated_alphabet
 
 
 def encrypt(text: str, table: list):
