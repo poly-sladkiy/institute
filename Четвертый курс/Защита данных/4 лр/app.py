@@ -276,11 +276,16 @@ def CBC_DES_DEC(IV, cyphertext,
 def main():
     IV = [0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1,
           1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1]
+    
     key = '133457799BBCDFF1'
-    text = 'Ignakov KM'
+    text = 'Nizhegorodskiy Gosudarstvenniy Politehnicheskii Univarsitet'
+
+    print(f"Текст: {text}")
+    print(f"Ключ: {key}")
+
     cyphertext = CBC_DES_ENC(IV, text, key)
-    print(''.join(cyphertext))
-    print(''.join(CBC_DES_DEC(IV, cyphertext, key)))
+    print('Шифр:', ''.join(cyphertext))
+    print('Дешифрование:', ''.join(CBC_DES_DEC(IV, cyphertext, key)))
 
 
 if __name__ == '__main__':
