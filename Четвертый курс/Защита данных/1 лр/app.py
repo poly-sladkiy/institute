@@ -5,6 +5,7 @@ column = 7
 
 russian_alpabeth = (chr(i) for i in range(ord('а'), ord('я') + 1))
 
+
 def create_table(key: str):
     start_words = []
     updated_alpbeth = list(russian_alpabeth)
