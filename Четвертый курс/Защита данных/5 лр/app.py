@@ -117,16 +117,23 @@ def decrypt(msg_ciphertext, package):
 # driver program
 if __name__ == "__main__":
     bit_length = int(input("Enter bit_length: "))
+
     print("Running RSA...")
     print("Generating public/private keypair...")
+
     public, private = generate_keypair(
         p, q, 2 ** bit_length)  # 8 is the keysize (bit-length) value.
+
     print("Public Key: ", public)
     print("Private Key: ", private)
+
     msg = input("Write msg: ")
     print([ord(c) for c in msg])
+
     encrypted_msg = encrypt(msg, public)
+
     print("Encrypted msg: ")
     print(''.join(map(lambda x: str(x), encrypted_msg)))
+
     print("Decrypted msg: ")
     print(decrypt(encrypted_msg, private))
