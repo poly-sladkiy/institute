@@ -323,8 +323,9 @@ class MyDES:
 
 
 if __name__ == '__main__':
-    key = "klashjldf"
-    md = MyDES()
-    print("Зашифрованные данные DES:" + md.encode("Ignakov KM", key))
-    print(f"Расшифрованные данные: {md.decode('0x39a8fc584ad6a2420xa6a6e5247336e282', key)}")
+    print('Исходный текст:', text := input("Введите текст для шифрования: ").strip().lower().replace('ё', 'е'))
+    print('Ключ:', key := str(input("Введите ключ для шифрования: ")))
 
+    md = MyDES()
+    print("Зашифрованные данные DES: " + (code := md.encode(text, key)))
+    print(f"Расшифрованные данные: {md.decode(code, key)}")
