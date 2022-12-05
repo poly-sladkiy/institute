@@ -5,9 +5,6 @@ from math import sqrt
 from random import randint as rand
 
 
-# just to use the well known keyword rand() from C++
-
-
 def gcd(a, b):
     if b == 0:
         return a

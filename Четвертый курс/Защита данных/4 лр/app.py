@@ -278,7 +278,7 @@ def main():
           1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1, 0, 1, 1, 0, 0, 0, 1, 1]
     
     key = '133457799BBCDFF1'
-    text = 'Nizhegorodskiy Gosudarstvenniy Politehnicheskii Univarsitet'
+    text = 'Good      nigtht'
 
     print(f"Текст: {text}")
     print(f"Ключ: {key}")
