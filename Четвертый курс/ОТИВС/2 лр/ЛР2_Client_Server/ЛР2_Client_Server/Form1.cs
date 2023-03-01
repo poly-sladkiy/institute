@@ -50,22 +50,22 @@ namespace ЛР2_Client_Server
             //int[,] rools_ = new int[100, 2];// параметр: настроеное на 100 проодукционных праввил с 3 исходами
             rools_ = new int[100, 2];// параметр: настроеное на 100 проодукционных праввил с 3 исходами
             //
-            rools_[1, 1] = 9;// кодируем правило if S1 and R1 (да) then S9
-            rools_[1, 0] = 2;// кодируем правило if S1 and R0 (нет) then S2
-            rools_[2, 1] = 3;// кодируем правило if S1 and R1 then S3
-            rools_[2, 0] = 4;// кодируем правило if S1 and R0 then S4 *
-            rools_[3, 1] = 10;// кодируем правило if S1 and R1 then S6
-            rools_[3, 0] = 11;// кодируем правило if S1 and R0 then S5 *        
-            rools_[4, 1] = 5;// кодируем правило if S1 and R1 then S7-
-            rools_[4, 0] = 13;// кодируем правило if S1 and R0 then S8 *
-            rools_[5, 1] = 12;// кодируем правило if S1 and R1 then S10
-            rools_[5, 0] = 6;// кодируем правило if S1 and R0 then S11*
-            rools_[6, 1] = 7;// кодируем правило if S1 and R1 then S12*
-            rools_[6, 0] = 8;// кодируем правило if S1 and R0 then S13*
-			rools_[13, 1] = 14;// кодируем правило if S1 and R1 then S12*
-            rools_[13, 0] = 15;// кодируем правило if S1 and R0 then S13*
-            rools_[14, 1] = 16;// кодируем правило if S1 and R0 then S13*
-            rools_[14, 0] = 17;// кодируем правило if S1 and R0 then S13*
+            rools_[1, 1] = 9;
+            rools_[1, 0] = 2;
+            rools_[2, 1] = 3;
+            rools_[2, 0] = 4;
+            rools_[3, 1] = 10
+            rools_[3, 0] = 11   
+            rools_[4, 1] = 5;
+            rools_[4, 0] = 13
+            rools_[5, 1] = 12
+            rools_[5, 0] = 6;
+            rools_[6, 1] = 7;
+            rools_[6, 0] = 8;
+			rools_[13, 1] = 14;
+            rools_[13, 0] = 15;
+            rools_[14, 1] = 16;
+            rools_[14, 0] = 17;
 
 
 
